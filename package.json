@@ -7,7 +7,7 @@
     "semioflix": "npm run bluid & npm run start",
     "dev": "nodemon src/server.ts",
     "bluid": "sucrase src -d dist --transforms typescript,imports",
-    "start": "node dist/server.ts"
+    "start": "node dist/server.js"
   },
   "repository": {
     "type": "git",
