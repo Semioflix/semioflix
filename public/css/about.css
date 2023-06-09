@@ -1,0 +1,13 @@
+.content {
+  padding: 10px 20px;
+}
+
+.title {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.paragraph {
+  text-align: justify;
+  padding: 10px 0;
+}

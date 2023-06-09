@@ -1,0 +1,640 @@
+extends ../layout
+block content
+  style. 
+    .content {
+      padding-top: 20px;
+      margin-top: 60px;
+    } 
+
+    .catalog-session {
+      margin: 20px 0 20px 0;
+      width: 100%;
+      padding: 20px;
+      position: relative;
+      height: 350px;
+    }
+
+    .catalog-title {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .catalog-title h1 {
+      font-size: 30px;
+      font-weight: 700;
+      padding-bottom: 15px;
+    }
+
+    .catalog-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;      
+      padding: 0 20px;
+      color: white;
+      z-index: 5;
+    }
+
+    .catalog-button i {
+      font-size: 30px;
+      margin-top: 70px;
+    }
+
+    .catalog-button i:hover {
+      color: #e50914;
+    }
+
+    .catalog-button:first-child {
+      left: 0;
+    }
+
+    .catalog-button:last-child {
+      right: 0;
+    }
+
+    .catalog-movies {
+      display: flex;
+      flex-wrap: no-wrap;
+      justify-content: left;
+      width: 96%;
+      height: 100%;
+      overflow-x: scroll;
+      scrollbar-width: none;
+      margin-left: 2%;
+    }
+
+    .catalog-movies::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .catalog-movies::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    .catalog-movies::-webkit-scrollbar-thumb {
+      background-color: #e50914;
+      border-radius: 5px;
+    }
+
+    .catalog-movies::-webkit-scrollbar-thumb:hover {
+      background-color: #e50914;
+    }
+
+    .catalog-movies::-webkit-scrollbar-thumb:active {
+      background-color: #e50914;
+    }
+    
+    .catalog-movies::-webkit-scrollbar-thumb:window-inactive {
+      background-color: #e50914;
+    }
+
+    .catalog-movies::-webkit-scrollbar-thumb:horizontal {
+      border-radius: 5px;
+    }
+
+    .catalog-movies::-webkit-scrollbar-thumb:vertical {
+      border-radius: 5px;
+    }
+
+    .catalog-movies::-webkit-scrollbar-corner {
+      background-color: transparent;
+    }    
+
+    .movie {
+      width: 100%;
+      heigth: 620px !important;
+      max-width: 200px;
+      min-width: 200px;
+      margin-bottom: 20px;
+      background-color: #000;
+      position: relative;
+    }
+
+    .movie:not(:first-child) {
+      margin-left: 8px;
+    }
+
+    .movie a {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .movie img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .movie:hover {
+      opacity: 0.7;
+      scale: 1.1;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .movie:active {
+      opacity: 0.5;
+    }
+
+    .movie:focus {
+      opacity: 0.5;
+    }
+
+    .movie::-moz-focus-inner {
+      border: 0;
+    }
+
+    .alert-new-espisode {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #e50914;
+      color: white;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 0 0 5px 0;
+      z-index: 100;
+    }
+
+    #add-movie-button {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    #add-movie-button:hover {
+      background-color: #e50914;
+      opacity: 0.7;
+    }
+
+    #add-movie-button:active {
+      background-color: #e50914;
+      opacity: 0.5;
+    }
+
+    #add-movie-button:focus {
+      background-color: #e50914;
+      opacity: 0.5;
+    }
+
+    #add-movie-button::-moz-focus-inner {
+      border: 0;
+    }
+
+    .modal-new-movie {
+      display: none;
+      position: absolute;
+      z-index: 3000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      min-height: 100vh;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);
+      color: black;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: #fefefe;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      border-radius: 6px;
+      box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+      width: 100%;
+      height: 85%;
+    }
+
+    .modal-body p {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .modal-footer button {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .modal-footer button:hover {
+      background-color: #e50914;
+      opacity: 0.7;
+    }
+
+    .modal-footer button:active {
+      background-color: #e50914;
+      opacity: 0.5;
+    }
+
+    .modal-footer button:focus {
+      background-color: #e50914;
+      opacity: 0.5;
+    }
+
+    .modal-footer button::-moz-focus-inner {
+      border: 0;
+    }
+
+    .modal-footer button.btn-cancel {
+      background-color: #333;
+    }
+
+    .modal-footer button.btn-cancel:hover {
+      background-color: #333;
+      opacity: 0.7;
+    }
+
+    .modal-footer button.btn-cancel:active {
+      background-color: #333;
+      opacity: 0.5;
+    }
+
+    .modal-footer button.btn-cancel:focus {
+      background-color: #333;
+      opacity: 0.5;
+    }
+
+    .modal-footer button.btn-cancel::-moz-focus-inner {
+      border: 0;
+    }
+
+    .modal-body .form-group {
+      margin-bottom: 20px;
+    }
+
+    .modal-body .form-group label {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .modal-body .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .form-group input:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body .form-group textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+      font-weight: 400;
+      resize: none;
+    }
+
+    .modal-body .form-group textarea:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .form-group select:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body .form-group select option {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .form-group .form-check {
+      display: flex;
+      align-items: center;
+    }
+
+    .modal-body .form-group .form-check input {
+      margin-right: 10px;
+    }
+
+    .modal-body .form-group .form-check label {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .form-group .form-check input:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body .form-group .form-check input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+    }
+
+    .modal-body .form-group .form-check input[type="checkbox"]:checked {
+      background-color: #e50914;
+    }
+
+    .modal-body .form-group .form-check input[type="checkbox"]:checked:after {
+      content: "\f00c";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      color: white;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 20px;
+    }
+
+    .modal-body .form-group .form-check input[type="checkbox"]:checked:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 20px;
+    }
+
+    .modal-body input[type="file"] {
+      display: none;
+    }
+
+    .modal-body input[type="file"]+label {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+      font-weight: 400;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .modal-body input[type="file"]+label:hover {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body input[type="file"]+label:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body input[type="file"]+label span {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .text-file-preview {
+      width: 100%;
+      height: 300px;
+      margin-top: 20px;
+      border: 4px dashed #ccc;
+      border-radius: 5px;
+      background-color: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-body .text-file-preview i {
+      font-size: 50px;
+      color: #ccc;
+      margin-right: 10px;
+    }
+
+    .image-preview {
+      width: 100%;
+      height: 300px;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #eee;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: none;
+      position: relative;
+    }
+    
+
+    #image-preview {
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+    }
+
+    #image-preview:hover {
+      opacity: 0.8;
+    }
+
+    .image-preview span {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      width: 100%;  
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: red;
+      font-size: 40px;
+      font-weight: 900;
+      border: 4px dashed red;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .image-preview span i {
+      margin-right: 10px;
+    }
+
+    #image-preview:hover + span,
+    #image-preview + span:hover {
+      display: flex;
+    }
+
+  include ../bar-admin.pug
+  .content
+
+    button#add-movie-button <i class="fas fa-folder-plus"></i> Crie uma nova série
+
+    .modal-new-movie
+      form(method="post", action="/admin/serie/create", enctype="multipart/form-data")
+        .modal-content
+          .modal-header
+            h2 <i class="fas fa-video"></i> Crie uma nova série
+            span.close-modal(x) &times;
+          .modal-body
+            .form-group 
+              label(for="title") <i class="fas fa-hashtag"></i> Título
+              input#title.form-control(type="text", placeholder="Título da série", required, name="title")
+            .form-group
+              label(for="description") <i class="fas fa-align-justify"></i> Descrição
+              textarea#description.form-control(placeholder="Descrição da série", required, name="description")
+            .form-group
+              label(for="cast") <i class="fas fa-users-rectangle"></i> Elenco
+              input#cast.form-control(type="text", placeholder="Elenco da série", required, name="cast")
+            .form-group
+              label(for="disponible") <i class="fas fa-play"></i> Disponível para assistir?
+              select#disponible.form-control(name="visible")
+                option(value="true") Sim
+                option(value="false") Não
+            .form-group#image-group
+              label.text-file-preview(for="image") <i class="fas fa-images"></i> Clique para selecionar uma imagem
+              input#image.form-control(type="file", accept="image/*", name="cover", required)
+            .image-preview
+              img#image-preview(src="", alt="Imagem de pré-visualização")
+              span#image-change <i class="fas fa-edit"></i> Selecionar outra imagem
+          .modal-footer
+            button.btn-cancel(type="button") Cancelar
+            button.btn-ok(type="submit") Ok
+    
+
+    .list-of-catalog
+      each a in [0, 1, 2, 3, 4]
+        .catalog-session
+          .catalog-title 
+            h1 # Catalog #{a + 1}
+          .catalog-buttons
+            button.catalog-button(data-direction="left")
+              i.fas.fa-chevron-left
+            button.catalog-button(data-direction="right")
+              i.fas.fa-chevron-right
+          .catalog-movies
+            each serie in series
+              .movie
+                a(href="/admin/serie/" + serie.id , title=serie.title)
+                  .alert-new-espisode New Episode
+                  img(src=serie.cover, alt="Movie")
+
+            each p in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+              .movie
+                a(href="/admin/serie/" + a, title="Movie " + p)
+                  .alert-new-espisode New Episode
+                  img(src="/public/images/semioflix.png", alt="Movie")
+
+
+  script. 
+    document.querySelectorAll("[data-direction='left']").forEach(button => {
+      button.addEventListener("click", () => {
+        button.parentElement.parentElement.querySelector(".catalog-movies").scrollLeft -= 200;
+        button.parentElement.parentElement.querySelector(".catalog-movies").scrollBehavior = "smooth";
+      });  
+    });
+ 
+    document.querySelectorAll("[data-direction='right']").forEach(button => {
+      button.addEventListener("click", () => {
+        button.parentElement.parentElement.querySelector(".catalog-movies").scrollLeft += 200;
+        button.parentElement.parentElement.querySelector(".catalog-movies").scrollBehavior = "smooth";
+      });
+    });
+
+    document.querySelector("#add-movie-button").addEventListener("click", () => {
+      document.querySelector(".modal-new-movie").style.display = "block";
+    });
+
+    document.querySelector(".close-modal").addEventListener("click", () => {
+      document.querySelector(".modal-new-movie").style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+      if (event.target == document.querySelector(".modal-new-movie")) {
+        document.querySelector(".modal-new-movie").style.display = "none";
+      }
+    });
+
+    document.querySelector(".btn-cancel").addEventListener("click", () => {
+      document.querySelector(".modal-new-movie").style.display = "none";
+    });
+
+    document.querySelector(".modal-new-movie").addEventListener("keydown", (event) => {
+      if (event.key == "Escape" || event.key == "Esc") {
+        document.querySelector(".modal-new-movie").style.display = "none";
+      }
+    });
+
+
+    document.querySelector("#image").addEventListener("change", () => {
+      const file = document.querySelector("#image").files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        document.querySelector("#image-preview").src = reader.result;
+        document.querySelector(".image-preview").style.display = "flex";
+        document.querySelector("#image-group").style.display = "none";
+      }
+
+      if (file) {
+        reader.readAsDataURL(file);
+      } else {
+        document.querySelector("#image-preview").src = "";
+      }
+
+      document.querySelector("#image-change").addEventListener("click", () => {
+        document.querySelector("#image").value = "";
+        document.querySelector("#image-preview").src = "";
+        document.querySelector(".image-preview").style.display = "none";
+        document.querySelector("#image-group").style.display = "block";
+        document.querySelector("#image").click();
+      });
+
+    });

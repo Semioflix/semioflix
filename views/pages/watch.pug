@@ -1,0 +1,64 @@
+extends ../layout
+block content
+  style. 
+    .content {
+      padding: 80px 20px 0 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .content video {
+      width: 1200px;
+      height: 600px;
+      object-fit: cover;
+    }
+
+    .content h2 {
+      font-size: 40px;
+      font-weight: 700;
+      padding: 20px 0 0 0;
+    }
+
+    .content p {
+      color: #999;
+      padding-bottom: 20px;
+    }
+
+    .content .serie-metrics {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .content .serie-metric {
+      margin-right: 20px;
+    }
+    
+    .content .serie-metric i {
+      margin-right: 5px;
+    }
+
+  include ../bar.pug
+  
+  .content 
+    video#videoPlayer(src=ep.url, controls, autoplay)
+      source(src=ep.url, type="video/mp4")
+      object(data="", width="320", height="240")
+        embed(src=ep.url, width="320", height="240")        
+
+    h2.title #{ep.title}
+    p.episode-createdBy #{new Date(ep.createdAt).getFullYear()}
+    p.paragraph #{ep.description}
+    .serie-metrics
+      .serie-metric
+        i.fas.fa-thumbs-up
+        | #{ep.likes}
+      .serie-metric
+        i.fas.fa-eye
+        | #{ep.views}
+      .serie-metric
+        i.fas.fa-share-alt
+        | #{ep.shares}

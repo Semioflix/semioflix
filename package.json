@@ -1,0 +1,49 @@
+{
+  "name": "semioflix",
+  "version": "1.0.0",
+  "description": "Um web site voltado para o ensino da semiologia voltada para a enfermagem.",
+  "main": "dist/server.js",
+  "scripts": {
+    "semioflix": "npm run bluid & npm run dev",
+    "dev": "nodemon src/server.ts",
+    "bluid": "sucrase src -d dist --transforms typescript,imports",
+    "start": "node dist/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/semioflix/semioflix.git"
+  },
+  "keywords": [
+    "Semiologia",
+    "video",
+    "aprendizado",
+    "testes",
+    "exames"
+  ],
+  "author": "Danilo Costa Santos - Academico em Enfermagem - CES UFCG",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/semioflix/semioflix/issues"
+  },
+  "homepage": "https://github.com/semioflix/semioflix#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "@supabase/supabase-js": "^1.35.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "multer": "^1.4.5-lts.1",
+    "pug": "^3.0.2",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/multer": "^1.4.7",
+    "@types/uuid": "^9.0.1",
+    "dotenv": "^16.1.4",
+    "nodemon": "^2.0.22",
+    "sucrase": "^3.32.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.1.3"
+  }
+}

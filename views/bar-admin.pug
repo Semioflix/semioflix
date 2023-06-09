@@ -1,0 +1,207 @@
+// Barra superior netflix
+style. 
+  .menu-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px 0 20px;
+    height: 70px;
+    background-color: #000;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2000;
+  }
+
+  .menu-bar .icon {
+    width: 200px;
+  }
+
+  .menu-bar .search-serie {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    height: 40px;
+    background-color: #333;
+    border-radius: 5px;
+    margin: 0 20px;
+  }
+
+  .menu-bar .search-serie input {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 16px;
+    padding: 0 10px;
+  }
+
+  .menu-bar .search-serie input::placeholder {
+    color: #fff;
+  }
+
+  .menu-bar .search-serie i {
+    font-size: 20px;
+    margin: 0 10px;
+  }
+
+  .menu-bar .menu-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+  }
+
+  .menu-bar .menu-links a {
+    margin: 0 10px;
+  }
+
+  .menu-bar .menu-links a {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .search-result {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    z-index: 100;
+    display: none;
+  }
+
+  .search-result .result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #333;
+  }
+
+  .search-result .result:last-child {
+    border-bottom: none;
+  }
+
+  .search-result .result a {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .search-result .result a:hover {
+    color: #e50914;
+  }
+
+  .search-result .result a .serie-cover {
+    width: 100px;
+    height: 150px;
+    margin-right: 20px;
+  }
+
+  .search-result .result a .serie-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .search-result .result a .serie-description {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .search-result .result a .serie-yaer {
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+.menu-bar 
+  a(href="/", class="logo")
+    img(class="icon", src="/public/images/semioflix-transparent.png", alt="Semioflix icon") 
+  .search-serie 
+    i.fas.fa-search
+    input(type="text", placeholder="Encontre algo para assistir")
+    .search-result#search-result
+
+  ul.menu-links 
+    li.link
+      a(href="/admin") 
+        i.fas.fa-film
+        |  Catálogo
+    li.link   
+      a(href="/admin/about") 
+        i.fas.fa-info-circle
+        |  Sobre 
+    li.link
+      a(href="/admin/users") 
+        i.fas.fa-users
+        |  Usuários
+    li.link
+      a(href="/admin/signout") 
+        i.fas.fa-sign-out-alt
+        |  Sair
+
+  script. 
+    const searchSerie = document.querySelector('.search-serie');
+    const searchResult = document.querySelector('.search-result');  
+    const searchInput = document.querySelector('.search-serie input');
+    
+    searchSerie.addEventListener('click', () => {
+      searchResult.style.display = 'block';
+    });
+
+    searchInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        searchResult.style.display = 'none';
+      }, 200);
+    });    
+
+    searchInput.addEventListener('keyup', () => {
+      const searchValue = searchInput.value.toLowerCase();
+      const result = document.querySelector('#search-result');
+
+      result.innerHTML = '';
+
+      if(searchValue.length > 3){
+        fetch('/search', { 
+          method: 'POST', 
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ searchValue })
+        })
+          .then(res => res.json())
+          .then(data => {
+            result.innerHTML = '';
+            
+            data.forEach(serie => {
+              let div = document.createElement('div');
+              div.classList.add('result');
+              
+              div.innerHTML = `
+                <a href="/serie/${serie.id}">
+                  <img class="serie-cover" src="${serie.cover}" alt="${serie.title}">
+                  <div>
+                    <h3 class="serie-title">${serie.title}</h3>
+                    <p class="serie-description">${serie.description}</p>
+                    <span class="serie-yaer">${new Date(serie.createdAt).getFullYear()}</span>
+                  </div>
+                </a>
+              `;
+
+              result.appendChild(div);
+            })
+          });
+      }
+    })      
+  
+    

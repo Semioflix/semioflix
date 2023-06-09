@@ -1,0 +1,838 @@
+extends ../layout
+block content
+  style. 
+    .content {
+      padding: 80px 0 0 0;
+    }
+
+    .serie-cover {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+
+    .serie-infos {
+      padding: 0 20px;
+    }
+
+    .serie-title {
+      font-size: 40px;
+      font-weight: 700;
+      padding: 20px 0 0 0;
+    }
+
+    .serie-createdBy {
+      color: #999;
+      padding-bottom: 20px;
+    }
+
+    .serie-description {
+      font-size: 20px;
+      padding-bottom: 20px;
+    }
+
+    .serie-metrics {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .serie-metric {
+      margin-right: 20px;
+    }
+
+    .serie-metric i {
+      margin-right: 5px;
+    }
+
+    .serie-metric:last-child {
+      margin-right: 0;
+    }
+
+    .serie-metric:hover {
+      color: #e50914;
+    }
+
+    .serie-metric:hover i {
+      color: #e50914;
+    }
+
+    .serie-metric:hover span {
+      color: #e50914;
+    }
+
+    .serie-metric:hover span i {
+      color: #e50914;
+    }
+
+    .serie-metric span {
+      font-size: 20px;
+    }
+
+    .serie-cast {
+      font-size: 18px;
+      padding: 20px 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .serie-btn-play {
+      width: 100%;
+      background-color: #e50914;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 10px 20px;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .serie-seasons {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .btn-serie-season {
+      background-color: transparent;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      font-size: 20px;
+      color: #999;
+      border: none;
+      border-bottom: 2px solid transparent;
+    }
+
+    .btn-serie-season:hover {
+      color: #e50914;
+    }
+
+    .btn-serie-season.active {
+      color: #e50914;
+      border-bottom: 2px solid #e50914;
+    }
+
+    .serie-episodes {
+      padding: 20px 0;
+      display: none;
+    }
+
+    .serie-episodes.active {
+      display: block;
+    }
+
+    .serie-episode {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid #999;
+    }
+
+    .serie-episode:last-child {
+      border-bottom: none;
+    }
+
+    .serie-episode-cover {
+      width: 400px;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .serie-episode-infos {
+      padding: 0 20px;
+    }
+
+    .serie-episode-title {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .serie-episode-title:hover {
+      color: #e50914;
+    }
+
+    .serie-episode-title:hover {
+      color: #e50914;
+    }
+
+    .serie-episode-description {
+      font-size: 16px;
+      color: #999;
+      margin-bottom: 18px;
+    }
+
+
+
+    
+    #add-movie-button {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    #add-movie-button:hover {
+      background-color: #e50914;
+      opacity: 0.7;
+    }
+
+    #add-movie-button:active {
+      background-color: #e50914;
+      opacity: 0.5;
+    }
+
+    #add-movie-button:focus {
+      background-color: #e50914;
+      opacity: 0.5;
+    }
+
+    #add-movie-button::-moz-focus-inner {
+      border: 0;
+    }
+
+    .modal-new-movie {
+      display: none;
+      position: absolute;
+      z-index: 3000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: fit-content;
+      min-height: 100%;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);
+      color: black;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: #fefefe;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      border-radius: 6px;
+      box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+      width: 100%;
+      height: 85%;
+    }
+
+    .modal-body p {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .modal-footer button {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .modal-footer button:hover {
+      background-color: #e50914;
+      opacity: 0.7;
+    }
+
+    .modal-footer button:active {
+      background-color: #e50914;
+      opacity: 0.5;
+    }
+
+    .modal-footer button:focus {
+      background-color: #e50914;
+      opacity: 0.5;
+    }
+
+    .modal-footer button::-moz-focus-inner {
+      border: 0;
+    }
+
+    .modal-footer button.btn-cancel {
+      background-color: #333;
+    }
+
+    .modal-footer button.btn-cancel:hover {
+      background-color: #333;
+      opacity: 0.7;
+    }
+
+    .modal-footer button.btn-cancel:active {
+      background-color: #333;
+      opacity: 0.5;
+    }
+
+    .modal-footer button.btn-cancel:focus {
+      background-color: #333;
+      opacity: 0.5;
+    }
+
+    .modal-footer button.btn-cancel::-moz-focus-inner {
+      border: 0;
+    }
+
+    .modal-footer button.btn-add {
+      background-color: #4BB543;
+    }
+
+    .modal-footer button.btn-add:hover {
+      background-color: #4BB543;
+      opacity: 0.7;
+    }
+
+    .modal-footer button.btn-add:active {
+      background-color: #4BB543;
+      opacity: 0.5;
+    }
+
+    .modal-footer button.btn-add:focus {
+      background-color: #4BB543;
+      opacity: 0.5;
+    }
+
+    .modal-footer button.btn-add::-moz-focus-inner {
+      border: 0;
+    }
+
+    .modal-body .form-group {
+      margin-bottom: 20px;
+    }
+
+    .modal-body .form-group label {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .modal-body .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .form-group input:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body .form-group textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+      font-weight: 400;
+      resize: none;
+    }
+
+    .modal-body .form-group textarea:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .form-group select:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body .form-group select option {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .form-group .form-check {
+      display: flex;
+      align-items: center;
+    }
+
+    .modal-body .form-group .form-check input {
+      margin-right: 10px;
+    }
+
+    .modal-body .form-group .form-check label {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .form-group .form-check input:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body .form-group .form-check input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+    }
+
+    .modal-body .form-group .form-check input[type="checkbox"]:checked {
+      background-color: #e50914;
+    }
+
+    .modal-body .form-group .form-check input[type="checkbox"]:checked:after {
+      content: "\f00c";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      color: white;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 20px;
+    }
+
+    .modal-body .form-group .form-check input[type="checkbox"]:checked:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 20px;
+    }
+
+    .modal-body input[type="file"] {
+      display: none;
+    }
+
+    .modal-body input[type="file"]+label {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+      font-weight: 400;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .modal-body input[type="file"]+label:hover {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body input[type="file"]+label:focus {
+      border: 1px solid #e50914;
+    }
+
+    .modal-body input[type="file"]+label span {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .modal-body .text-file-preview {
+      width: 100%;
+      height: 300px;
+      margin-top: 20px;
+      border: 4px dashed #ccc;
+      border-radius: 5px;
+      background-color: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-body .text-file-preview i {
+      font-size: 50px;
+      color: #ccc;
+      margin-right: 10px;
+    }
+
+    .image-preview {
+      width: 100%;
+      height: 300px;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #eee;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: none;
+      position: relative;
+    }
+    
+
+    #image-preview {
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+    }
+
+    #image-preview:hover {
+      opacity: 0.8;
+    }
+
+    .image-preview span {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      width: 100%;  
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: red;
+      font-size: 40px;
+      font-weight: 900;
+      border: 4px dashed red;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .image-preview span i {
+      margin-right: 10px;
+    }
+
+    #image-preview:hover + span,
+    #image-preview + span:hover {
+      display: flex;
+    }
+
+    .episode {
+      height: 350px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      border-bottom: 1px solid #ccc;
+      margin-top: 10px;
+    }
+
+    .episode:last-child {
+      border-bottom: none;
+    }
+
+    .episode .updated {
+      margin: 10px 0 0 20px;
+      width: 30%;
+      height: 100%;
+    }
+
+    .episode .updated .video-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 95%;  
+      height: 80%;
+      margin-top: 10px;
+      background-color: #eee;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .episode .updated .video-preview i {
+      margin-right: 8px;
+    }
+
+    .episode .updated-infos {
+      margin-right: 20px;
+      width: 70%;
+    }
+
+    .btn-remove-episode,
+    .btn-move-up-episode,
+    .btn-move-down-episode {
+      outline: none;
+      color: white;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .btn-remove-episode {
+      background-color: #e50914;
+      margin-right: 10px;
+    }
+
+    .btn-remove-episode:hover {
+      background-color: #c5050c;
+    }
+
+    .btn-move-up-episode {
+      background-color: #4d7ea8;
+      margin-right: 10px;
+    }
+
+    .btn-move-up-episode:hover {
+      background-color: #3a5d7f;
+    }
+
+    .btn-move-down-episode {
+      background-color: #3d5a80;
+    }
+
+    .btn-move-down-episode:hover {
+      background-color: #2c4360;
+    }
+      
+  include ../bar-admin.pug
+
+  .content 
+    img(class="serie-cover", src="/public/images/semioflix.png", alt=title)
+
+    button#add-movie-button <i class="fas fa-folder-plus"></i> Criar nova temporada
+
+    .modal-new-movie
+      form(method="post", action="/admin/season/create", enctype="multipart/form-data")
+        input(type="hidden", name="serieId", value=serie.id)
+        .modal-content
+          .modal-header
+            h2 <i class="fas fa-video"></i> Crie um nova temporada
+            span.close-modal(x) &times;
+          .modal-body
+            .form-group 
+              label(for="title") <i class="fas fa-hashtag"></i> Título da temporada
+              input#title.form-control(type="text", placeholder="Título da temporada", required, name="season-title")
+            .my-episodes-list#my-episodes-list
+              each index, ep in [1]
+                .episode(data-ep="ep-" + index)  
+                  .updated
+                    label.video-preview#episode-1-preview(for="episode-1") <i class="fas fa-video"></i> Selecione um vídeo
+                    input(type="file", name="videos[]" , id="episode-1", required, accept="video/mp4,video/x-m4v,video/*")
+                  .updated-infos 
+                    .form-group 
+                      label(for="episode-1-title") <i class="fas fa-hashtag"></i> Título do episódio
+                      input#episode-1-title.form-control(type="text", placeholder="Título do episódio", required, name="ep-" + index + "-title")
+                    .form-group
+                      label(for="episode-1-description") <i class="fas fa-align-left"></i> Descrição do episódio
+                      textarea#episode-1-description.form-control(type="text", placeholder="Descrição do episódio", required, name="ep-" + index + "-description")
+                    .form-group
+                      label(for="episode-1-visible") <i class="fas fa-clock"></i> Disponível para assistir?
+                      select#episode-1-visible.form-control(name="ep-" + index + "-visible")
+                        option(value="true") Sim
+                        option(value="false") Não
+                    .form-group
+                      button.btn-remove-episode(type="button", data-remove-ep="ep-" + index) <i class="fas fa-trash"></i> Remover episódio
+                      button.btn-move-up-episode(type="button", data-move-up-ep="ep-" + index) <i class="fas fa-arrow-up"></i> Mover para cima
+                      button.btn-move-down-episode(type="button", data-move-down-ep="ep-" + index) <i class="fas fa-arrow-down"></i> Mover para baixo
+          .modal-footer
+            button.btn-cancel(type="button") Cancelar
+            button.btn-add#data-btn-add-ep(type="button") Adicionar novo episódio
+            button.btn-ok(type="submit") Ok
+
+    .serie-infos
+      h1.serie-title #{serie.title}
+      small.serie-createdBy #{new Date(serie.createdAt).toLocaleDateString("pt-BR", { year: 'numeric', month: 'long', day: 'numeric' })} 
+      p.serie-description #{serie.description}
+      .serie-metrics  
+        span.serie-metric <i class="fas fa-star"></i> 4.5
+        span.serie-metric <i class="fas fa-heart"></i> #{serie.likes}
+        span.serie-metric <i class="fas fa-eye"></i> #{serie.views}
+      p.serie-cast 
+        strong Estrelando: #{serie.cast}
+      button.serie-btn-play <i class="fas fa-play"></i> Assistir 
+
+      h2.serie-title Temporadas & Episódios
+
+      div.serie-seasons 
+        each season, index in serie.Seasons
+          button(class="btn-serie-season " + (index == 0 ? "active" : "") , data-btn-season="season"+ index) Temporada #{index + 1}: #{season.title}
+
+      each season, index in serie.Seasons
+        div.serie-episodes(data-season="season"+ index, class=(index == 0 ? "active" : ""))
+          each episode, index2 in season.episodes
+            div.serie-episode
+              a(href="/watch/" + season.id + "/" + episode.id)
+                img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
+              div.serie-episode-infos
+                h3.serie-episode-title Episódio 1: #{episode.title} 
+                p.serie-episode-description #{episode.description}
+                a.serie-btn-play(href="/watch/" + season.id + "/" + episode.id) <i class="fas fa-play"></i> Assistir 
+
+
+  script. 
+    const btnSeasons = document.querySelectorAll("[data-btn-season]");
+    const episodes = document.querySelectorAll(".serie-episodes");
+
+    btnSeasons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const season = btn.getAttribute("data-btn-season");
+        episodes.forEach((episode) => {
+          episode.classList.remove("active");
+        });
+        document.querySelector(`[data-season="${season}"]`).classList.add("active");
+        btnSeasons.forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        btn.classList.add("active");
+      });
+    });
+
+    document.querySelector("#add-movie-button").addEventListener("click", () => {
+      document.querySelector(".modal-new-movie").style.display = "block";
+    });
+
+    document.querySelector(".close-modal").addEventListener("click", () => {
+      document.querySelector(".modal-new-movie").style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+      if (event.target == document.querySelector(".modal-new-movie")) {
+        document.querySelector(".modal-new-movie").style.display = "none";
+      }
+    });
+
+    document.querySelector(".btn-cancel").addEventListener("click", () => {
+      document.querySelector(".modal-new-movie").style.display = "none";
+    });
+
+    document.querySelector(".modal-new-movie").addEventListener("keydown", (event) => {
+      if (event.key == "Escape" || event.key == "Esc") {
+        document.querySelector(".modal-new-movie").style.display = "none";
+      }
+    });
+
+
+    let qtd = 1;
+
+    document.querySelector("#data-btn-add-ep").addEventListener("click", () => {
+      qtd++;
+
+      let episode = document.createElement("div");
+      episode.classList.add("episode");
+      episode.setAttribute("data-ep", "ep-" + qtd);
+
+      episode.innerHTML = `
+        <div class="updated">
+          <label class="video-preview" for="episode-${qtd}"><i class="fas fa-video"></i> Selecione um vídeo</label>
+          <input type="file" name="videos[]" id="episode-${qtd}" class="form-control" required accept="video/mp4,video/x-m4v,video/*">
+        </div>
+        <div class="updated-infos">
+          <div class="form-group">
+            <label for="episode-${qtd}-title"><i class="fas fa-hashtag"></i> Título do episódio</label>
+            <input id="episode-${qtd}-title" class="form-control" type="text" placeholder="Título do episódio" required name="ep-${qtd}-title">
+          </div>
+          <div class="form-group">
+            <label for="episode-${qtd}-description"><i class="fas fa-align-left"></i> Descrição do episódio</label>
+            <textarea id="episode-${qtd}-description" class="form-control" type="text" placeholder="Descrição do episódio" required name="ep-${qtd}-description"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="episode-${qtd}-visible"><i class="fas fa-clock"></i> Disponível para assistir?</label>
+            <select id="episode-${qtd}-visible" class="form-control" name="ep-${qtd}-visible" required>
+              <option value="true">Sim</option>
+              <option value="false">Não</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <button class="btn-remove-episode" type="button" data-remove-ep="ep-${qtd}"><i class="fas fa-trash"></i> Remover episódio</button>
+            <button class="btn-move-up-episode" type="button" data-move-up-ep="ep-${qtd}"><i class="fas fa-arrow-up"></i> Mover para cima</button>
+            <button class="btn-move-down-episode" type="button" data-move-down-ep="ep-${qtd}"><i class="fas fa-arrow-down"></i> Mover para baixo</button>
+          </div>
+        </div>
+      `
+
+      document.querySelector("#my-episodes-list").appendChild(episode);   
+
+      document.querySelectorAll("[data-remove-ep]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const ep = btn.getAttribute("data-remove-ep");
+          document.querySelector(`[data-ep="${ep}"]`).remove();
+        });
+      });
+      
+      document.querySelectorAll("[data-move-up-ep]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const ep = btn.getAttribute("data-move-up-ep");
+          const epElement = document.querySelector(`[data-ep="${ep}"]`);
+          const epElementPrev = epElement.previousElementSibling;
+          if (epElementPrev) epElementPrev.before(epElement);  
+        });
+      });
+      
+      document.querySelectorAll("[data-move-down-ep]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const ep = btn.getAttribute("data-move-down-ep");
+          const epElement = document.querySelector(`[data-ep="${ep}"]`);
+          const epElementNext = epElement.nextElementSibling;
+          if (epElementNext) epElementNext.after(epElement);  
+        });
+      });
+
+    });
+    
+    document.querySelectorAll("[data-remove-ep]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const ep = btn.getAttribute("data-remove-ep");
+        document.querySelector(`[data-ep="${ep}"]`).remove();
+      });
+    });
+    
+    document.querySelectorAll("[data-move-up-ep]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const ep = btn.getAttribute("data-move-up-ep");
+        const epElement = document.querySelector(`[data-ep="${ep}"]`);
+        const epElementPrev = epElement.previousElementSibling;
+        if (epElementPrev) epElementPrev.before(epElement);  
+      });
+    });
+    
+    document.querySelectorAll("[data-move-down-ep]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const ep = btn.getAttribute("data-move-down-ep");
+        const epElement = document.querySelector(`[data-ep="${ep}"]`);
+        const epElementNext = epElement.nextElementSibling;
+        if (epElementNext) epElementNext.after(epElement);  
+      });
+    });
+
+

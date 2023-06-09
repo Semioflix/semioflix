@@ -1,0 +1,119 @@
+extends ../layout
+block content
+  style. 
+
+    body {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    /* fonte netflix: */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+    .title {
+      width: 100%;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .login {
+      width: fit-content;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      align-items: center;
+      background-color: #555;
+      padding: 30px 40px;
+      border-radius: 5px;
+    }
+
+    input {
+      width: 100%;
+      height: 50px;
+      border: none;
+      border-radius: 2px;
+      background-color: #333;
+      color: #fff;
+      font-size: 1rem;
+      padding: 0 20px;
+      border: 1px solid #333;
+      border-radius: 5px;
+      font-weight: 700;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    input:invalid {
+      border-bottom: 1px solid orange;
+    }
+
+    span {
+      display: none;
+      color: orange !important;
+      font-weight: 700;
+    }
+
+    input:invalid + span {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      height: 50px;
+      border: none;
+      border-radius: 2px;
+      background-color: #e50914;
+      color: #fff;
+      font-size: 1rem;
+      padding: 0 20px;
+      margin-bottom: 20px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    form > div {
+      margin-top: 20px;
+    }
+
+    .settings {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .settings a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+  img.logo(src="/public/images/semioflix-transparent.png", alt="Logo")
+  div.login  
+    h1.title Entrar
+    form(action="/signin", method="POST")
+      div   
+        label(for="email") Email ou nome de usuário
+        input(type="text", name="email", id="email", placeholder="Email ou nome de usuário")
+        span(style="color: red;") Informe um email ou nome de usuário válido
+      div
+        label(for="password") Senha
+        input(type="password", name="password", id="password", placeholder="Senha", minlength="6")
+        span(style="color: red;") A senha deve ter no mínimo 6 caracteres
+      div
+        button(type="submit") Entrar
+    .settings 
+      a(href="/user/signup") Criar conta
+      a(href="/user/forgot-password") Esqueceu a senha?
