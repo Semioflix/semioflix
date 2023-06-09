@@ -4,7 +4,7 @@
   "description": "Um web site voltado para o ensino da semiologia voltada para a enfermagem.",
   "main": "dist/server.js",
   "scripts": {
-    "semioflix": "npm run bluid & npm run dev",
+    "semioflix": "npm run bluid & npm run start",
     "dev": "nodemon src/server.ts",
     "bluid": "sucrase src -d dist --transforms typescript,imports",
     "start": "node dist/server.ts"
