@@ -12,7 +12,7 @@ function authenticate() {
         const authenticated = connection.auth.session() ? true : false;
 
         if (authenticated) return next();
-        return res.status(401).redirect('/admin');
+        return res.status(401).redirect('/admin/signin');
       });
     },
     onlyAdmins: (req: Request, res: Response, next: NextFunction) => {
@@ -22,7 +22,7 @@ function authenticate() {
           .select("*")
           .match({ id: App.get("user").getId() });
 
-        if (error) return res.status(401).redirect('/admin');
+        if (error) return res.status(401).redirect('/admin/signin');
 
         const user = new User(data[0]);
 

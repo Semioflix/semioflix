@@ -1,7 +1,9 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _express = require('express');
 var _connection = require('./database/connection');
 var _Serie = require('./database/models/Serie');
+
 var _adminroutes = require('./routes/admin.routes'); var _adminroutes2 = _interopRequireDefault(_adminroutes);
+var _authenticateroutes = require('./routes/authenticate.routes'); var _authenticateroutes2 = _interopRequireDefault(_authenticateroutes);
 
 class generalRoutes {
    __init() {this.routes = _express.Router.call(void 0, )}
@@ -13,6 +15,7 @@ class generalRoutes {
 
   otherRoutes() {
     this.routes.use("/admin", _adminroutes2.default);
+    this.routes.use("/auth", _authenticateroutes2.default);
   }
 
   config() {

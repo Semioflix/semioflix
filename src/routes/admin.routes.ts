@@ -1,11 +1,16 @@
 import { Router, Request, Response } from "express";
 import { connection } from "../database/connection";
+import { authenticate } from "../database/authenticate";
 import { uploadImage, uploadVideo, uploadVideos } from "../database/uploads";
 import { Season } from "../database/models/Season";
 import { Episode } from "../database/models/Episode";
 
+const auth = authenticate();
+
 import fs from "fs";
 import { Serie } from "../database/models/Serie";
+import { User } from "../database/models/User";
+import App from "../App";
 
 class adminRoutes {
   public routes: Router = Router();
@@ -22,7 +27,7 @@ class adminRoutes {
       });
     });
 
-    this.routes.get("/", async (req: Request, res: Response) => {
+    this.routes.get("/", auth.auth, async (req: Request, res: Response) => {
       const { data: series } = await connection.from("Series").select("*");
 
       return res.render("admin/dashboard", {
@@ -32,7 +37,7 @@ class adminRoutes {
       });
     });
 
-    this.routes.get("/serie/:id", async (req: Request, res: Response) => {
+    this.routes.get("/serie/:id", auth.auth, async (req: Request, res: Response) => {
       const { id } = req.params;
 
       const { data: serie, error } = await connection.from("Series").select("*, Seasons(*)").eq("id", id).single();
@@ -46,7 +51,9 @@ class adminRoutes {
       });
     });
 
-    this.routes.post("/serie/create", uploadImage.single('cover'), async (req: Request, res: Response) => {
+    this.routes.post("/serie/create", auth.auth, uploadImage.single('cover'), async (req: Request, res: Response) => {
+      const user = new User(App.get('user'));
+
       const { title, description, cast, visible } = req.body;
       const cover = req.file;
 
@@ -68,7 +75,7 @@ class adminRoutes {
         cast,
         visible,
         cover: `https://yizosayzoigeczzlmyae.supabase.co/storage/v1/object/public/${data?.Key}`,
-        createdBy: '93527129-47e5-4cae-b246-b7da77ba0aaf'
+        createdBy: user.getId()
       })
 
       const { data: serieData, error: serieError } = await connection.from("Series").insert(serie);
@@ -84,7 +91,7 @@ class adminRoutes {
       });
     });
 
-    this.routes.post("/season/create", uploadVideos.array('videos[]'), async (req: Request, res: Response) => {
+    this.routes.post("/season/create", auth.auth, uploadVideos.array('videos[]'), async (req: Request, res: Response) => {
       const episodes = req.files;
 
 
@@ -99,7 +106,7 @@ class adminRoutes {
       if (!serie) return res.status(400).json({ message: 'Ops! A série não foi encontrada!' });
 
       const seasonsQuantity = serie.Seasons.length + 1;
-      const dist = "https://yizosayzoigeczzlmyae.supabase.co/storage/v1/object/public/Semioflix/series/" + serie.title.split(' ').map((word: string) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const dist = process.env.STORAGE + "/series/" + serie.title.split(' ').map((word: string) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       const url = serie.title.split(' ').map((word: string) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
       if (!episodes) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
@@ -135,7 +142,7 @@ class adminRoutes {
 
       if (seasonError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao criar a temporada!', seasonError });
 
-      return res.status(200).json({ message: 'Temporada criada com sucesso!', seasonData });
+      return res.status(200).redirect('/serie/' + id);
     });
   }
 }

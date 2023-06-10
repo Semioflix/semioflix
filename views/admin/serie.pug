@@ -561,7 +561,7 @@ block content
 
     .episode .updated {
       margin: 10px 0 0 20px;
-      width: 30%;
+      width: 40%;
       height: 100%;
     }
 
@@ -569,21 +569,22 @@ block content
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 95%;  
+      width: 96%;  
       height: 80%;
       margin-top: 10px;
       background-color: #eee;
       padding: 10px;
       border-radius: 5px;
+      border: 5px dashed #ccc;
     }
-
+    
     .episode .updated .video-preview i {
       margin-right: 8px;
     }
 
     .episode .updated-infos {
       margin-right: 20px;
-      width: 70%;
+      width: 60%;
     }
 
     .btn-remove-episode,
@@ -624,7 +625,29 @@ block content
     .btn-move-down-episode:hover {
       background-color: #2c4360;
     }
-      
+
+    /* botão mais pequeno */
+
+    .btn-remove-video {
+      outline: none;
+      color: white;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .btn-remove-video {
+      background-color: #e50914;
+      margin-right: 10px;
+    }
+
+    .btn-remove-video:hover {
+      background-color: #c5050c;
+    }
+          
   include ../bar-admin.pug
 
   .content 
@@ -783,6 +806,10 @@ block content
 
       document.querySelector("#my-episodes-list").appendChild(episode);   
 
+      init();
+    });
+    
+    function init(){
       document.querySelectorAll("[data-remove-ep]").forEach(btn => {
         btn.addEventListener("click", () => {
           const ep = btn.getAttribute("data-remove-ep");
@@ -808,31 +835,34 @@ block content
         });
       });
 
-    });
-    
-    document.querySelectorAll("[data-remove-ep]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const ep = btn.getAttribute("data-remove-ep");
-        document.querySelector(`[data-ep="${ep}"]`).remove();
-      });
-    });
-    
-    document.querySelectorAll("[data-move-up-ep]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const ep = btn.getAttribute("data-move-up-ep");
-        const epElement = document.querySelector(`[data-ep="${ep}"]`);
-        const epElementPrev = epElement.previousElementSibling;
-        if (epElementPrev) epElementPrev.before(epElement);  
-      });
-    });
-    
-    document.querySelectorAll("[data-move-down-ep]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const ep = btn.getAttribute("data-move-down-ep");
-        const epElement = document.querySelector(`[data-ep="${ep}"]`);
-        const epElementNext = epElement.nextElementSibling;
-        if (epElementNext) epElementNext.after(epElement);  
-      });
-    });
+      document.querySelectorAll("[name='videos[]']").forEach(input => {
+        input.addEventListener("change", () => {
+          const videoPreview = input.previousElementSibling;
+          const video = input.files[0];
+          const videoURL = URL.createObjectURL(video);
+          videoPreview.style.display = "none";
 
+          let myVideo = document.createElement("div");
+          myVideo.classList.add("video-preview");
+          myVideo.innerHTML = `
+            <div>
+              <video src="${videoURL}" controls width="80%"></video>
+              <button onclick="removeVideo(this, '${input.getAttribute('id')}', '${videoPreview.getAttribute('for')}')" type="button" class="btn-remove-video"><i class="fas fa-trash"></i> Remover vídeo</button>
+            </div>
+          `;
 
+          input.after(myVideo);          
+        });
+      });
+
+    }
+
+    function removeVideo(e, input, videoPreview){
+      
+      document.querySelector(`#${input}`).value = "";
+      document.querySelector(`[for="${videoPreview}"]`).style.display = "flex";
+          
+      e.parentElement.parentElement.remove();
+    }
+
+    init();

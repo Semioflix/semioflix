@@ -103,7 +103,7 @@ block content
   img.logo(src="/public/images/semioflix-transparent.png", alt="Logo")
   div.login  
     h1.title Entrar
-    form(action="/signin", method="POST")
+    form(action="/auth/signin", method="POST")
       div   
         label(for="email") Email ou nome de usuário
         input(type="text", name="email", id="email", placeholder="Email ou nome de usuário")

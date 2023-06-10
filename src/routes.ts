@@ -1,7 +1,9 @@
 import { Router, Request, Response } from "express";
 import { connection } from "./database/connection";
 import { Serie } from "./database/models/Serie";
+
 import adminRoutes from "./routes/admin.routes";
+import authenticateRoutes from "./routes/authenticate.routes";
 
 class generalRoutes {
   public routes: Router = Router();
@@ -13,6 +15,7 @@ class generalRoutes {
 
   otherRoutes(): void {
     this.routes.use("/admin", adminRoutes);
+    this.routes.use("/auth", authenticateRoutes);
   }
 
   config(): void {

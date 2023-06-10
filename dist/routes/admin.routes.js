@@ -1,11 +1,16 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }var _express = require('express');
 var _connection = require('../database/connection');
+var _authenticate = require('../database/authenticate');
 var _uploads = require('../database/uploads');
 var _Season = require('../database/models/Season');
 var _Episode = require('../database/models/Episode');
 
+const auth = _authenticate.authenticate.call(void 0, );
+
 var _fs = require('fs'); var _fs2 = _interopRequireDefault(_fs);
 var _Serie = require('../database/models/Serie');
+var _User = require('../database/models/User');
+var _App = require('../App'); var _App2 = _interopRequireDefault(_App);
 
 class adminRoutes {
    __init() {this.routes = _express.Router.call(void 0, )}
@@ -22,7 +27,7 @@ class adminRoutes {
       });
     });
 
-    this.routes.get("/", async (req, res) => {
+    this.routes.get("/", auth.auth, async (req, res) => {
       const { data: series } = await _connection.connection.from("Series").select("*");
 
       return res.render("admin/dashboard", {
@@ -32,7 +37,7 @@ class adminRoutes {
       });
     });
 
-    this.routes.get("/serie/:id", async (req, res) => {
+    this.routes.get("/serie/:id", auth.auth, async (req, res) => {
       const { id } = req.params;
 
       const { data: serie, error } = await _connection.connection.from("Series").select("*, Seasons(*)").eq("id", id).single();
@@ -46,7 +51,9 @@ class adminRoutes {
       });
     });
 
-    this.routes.post("/serie/create", _uploads.uploadImage.single('cover'), async (req, res) => {
+    this.routes.post("/serie/create", auth.auth, _uploads.uploadImage.single('cover'), async (req, res) => {
+      const user = new (0, _User.User)(_App2.default.get('user'));
+
       const { title, description, cast, visible } = req.body;
       const cover = req.file;
 
@@ -68,7 +75,7 @@ class adminRoutes {
         cast,
         visible,
         cover: `https://yizosayzoigeczzlmyae.supabase.co/storage/v1/object/public/${_optionalChain([data, 'optionalAccess', _2 => _2.Key])}`,
-        createdBy: '93527129-47e5-4cae-b246-b7da77ba0aaf'
+        createdBy: user.getId()
       })
 
       const { data: serieData, error: serieError } = await _connection.connection.from("Series").insert(serie);
@@ -84,7 +91,7 @@ class adminRoutes {
       });
     });
 
-    this.routes.post("/season/create", _uploads.uploadVideos.array('videos[]'), async (req, res) => {
+    this.routes.post("/season/create", auth.auth, _uploads.uploadVideos.array('videos[]'), async (req, res) => {
       const episodes = req.files;
 
 
@@ -99,7 +106,7 @@ class adminRoutes {
       if (!serie) return res.status(400).json({ message: 'Ops! A série não foi encontrada!' });
 
       const seasonsQuantity = serie.Seasons.length + 1;
-      const dist = "https://yizosayzoigeczzlmyae.supabase.co/storage/v1/object/public/Semioflix/series/" + serie.title.split(' ').map((word) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const dist = process.env.STORAGE + "/series/" + serie.title.split(' ').map((word) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       const url = serie.title.split(' ').map((word) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
       if (!episodes) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
@@ -135,7 +142,7 @@ class adminRoutes {
 
       if (seasonError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao criar a temporada!', seasonError });
 
-      return res.status(200).json({ message: 'Temporada criada com sucesso!', seasonData });
+      return res.status(200).redirect('/serie/' + id);
     });
   }
 }
