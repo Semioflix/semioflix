@@ -42,7 +42,12 @@ class Season implements ISeason {
   public getEpisodes = (): Episode[] => this.episodes;
   public setEpisodes = (episodes: Episode[]): Episode[] => this.episodes = episodes;
   public addEpisode = (episode: Episode) => this.episodes.push(episode);
-
+  public removeEpisode = (episodeId: string) => this.episodes = this.episodes.filter(episode => episode.getId() !== episodeId);
+  public updateEpisode = (episodeId: string, episode: Episode) => {
+    const episodeIndex = this.episodes.findIndex(episode => new Episode(episode).getId() === episodeId);
+    this.episodes[episodeIndex] = episode;
+  };
+  
   public getSerieId = (): string => this.serieId;
   
   public getCreatedAt = (): Date => this.createdAt;

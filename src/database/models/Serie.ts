@@ -2,7 +2,6 @@ import { v4 as uuid } from "uuid";
 
 interface ISerie {
   readonly id?: string;
-  readonly createdBy: string;
   title: string;
   description: string;
   cast?: string;
@@ -16,7 +15,6 @@ interface ISerie {
 
 class Serie implements ISerie {
   readonly id: string;
-  readonly createdBy: string;
   title: string;
   description: string;
   cast?: string;
@@ -29,7 +27,6 @@ class Serie implements ISerie {
 
   constructor({
     id,
-    createdBy,
     title,
     description,
     cast,
@@ -41,7 +38,6 @@ class Serie implements ISerie {
     updatedAt,
   }: ISerie) {
     this.id = id || uuid();
-    this.createdBy = createdBy;
     this.title = title;
     this.description = description;
     this.cast = cast;
@@ -54,8 +50,6 @@ class Serie implements ISerie {
   }
 
   public getId = (): string => this.id;
-
-  public getCreatedBy = (): string => this.createdBy;
 
   public getTitle = (): string => this.title;
   public setTitle = (title: string): void => {

@@ -5,12 +5,10 @@ import { uploadImage, uploadVideo, uploadVideos } from "../database/uploads";
 import { Season } from "../database/models/Season";
 import { Episode } from "../database/models/Episode";
 
-const auth = authenticate();
-
 import fs from "fs";
 import { Serie } from "../database/models/Serie";
-import { User } from "../database/models/User";
-import App from "../App";
+
+import "dotenv/config";
 
 class adminRoutes {
   public routes: Router = Router();
@@ -27,7 +25,7 @@ class adminRoutes {
       });
     });
 
-    this.routes.get("/", auth.auth, async (req: Request, res: Response) => {
+    this.routes.get("/", async (req: Request, res: Response) => {
       const { data: series } = await connection.from("Series").select("*");
 
       return res.render("admin/dashboard", {
@@ -37,7 +35,7 @@ class adminRoutes {
       });
     });
 
-    this.routes.get("/serie/:id", auth.auth, async (req: Request, res: Response) => {
+    this.routes.get("/serie/:id", async (req: Request, res: Response) => {
       const { id } = req.params;
 
       const { data: serie, error } = await connection.from("Series").select("*, Seasons(*)").eq("id", id).single();
@@ -51,8 +49,7 @@ class adminRoutes {
       });
     });
 
-    this.routes.post("/serie/create", auth.auth, uploadImage.single('cover'), async (req: Request, res: Response) => {
-      const user = new User(App.get('user'));
+    this.routes.post("/serie/create", uploadImage.single('cover'), async (req: Request, res: Response) => {
 
       const { title, description, cast, visible } = req.body;
       const cover = req.file;
@@ -64,8 +61,11 @@ class adminRoutes {
 
       const { data, error } = await connection.storage.from("Semioflix").upload(`/series/${dist}/cover.${cover.mimetype.split('/')[1]}`, fs.readFileSync(cover.path), {
         cacheControl: '3600',
-        upsert: false
+        upsert: false,
+        contentType: cover.mimetype
       });
+
+      if (error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload da imagem!', error });
 
       fs.unlinkSync(cover.path);
 
@@ -74,26 +74,39 @@ class adminRoutes {
         description,
         cast,
         visible,
-        cover: `https://yizosayzoigeczzlmyae.supabase.co/storage/v1/object/public/${data?.Key}`,
-        createdBy: user.getId()
+        cover: `${process.env.STORAGE}/${data?.Key}`
       })
 
       const { data: serieData, error: serieError } = await connection.from("Series").insert(serie);
 
       if (serieError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao criar a série!', error });
 
-      if (error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload da imagem!', error });
 
-      return res.status(200).render("admin/serie/" + serie.getId(), {
-        title: serie.getTitle(),
-        imports: "serie",
-        serie
-      });
+      return res.status(200).redirect("/admin/serie/" + serie.getId());
     });
 
-    this.routes.post("/season/create", auth.auth, uploadVideos.array('videos[]'), async (req: Request, res: Response) => {
-      const episodes = req.files;
+    this.routes.get("/serie/delete/:id", uploadImage.single('cover'), async (req: Request, res: Response) => {
+      const { id } = req.params;
 
+      const { data: serie, error } = await connection.from("Series").select("*, Seasons(*)").eq("id", id).single();
+      
+      if (error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao buscar a série!', error });
+      
+      const dist = serie.title.split(' ').map((word: string) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+      const remove = await connection.storage.from("Semioflix")._removeEmptyFolders(`/series/${dist}`);
+      
+      console.log(remove)
+
+      const { data: serieData, error: serieError } = await connection.from("Series").delete().eq("id", id);
+
+      if (serieError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao deletar a série!', error });
+
+      return res.status(200).redirect("/admin");
+    });
+
+    this.routes.post("/season/create", uploadVideos.array('videos[]'), async (req: Request, res: Response) => {
+      const episodes = req.files;
 
       const id = req.body.serieId;
       const title = req.body['season-title'];
@@ -106,7 +119,6 @@ class adminRoutes {
       if (!serie) return res.status(400).json({ message: 'Ops! A série não foi encontrada!' });
 
       const seasonsQuantity = serie.Seasons.length + 1;
-      const dist = process.env.STORAGE + "/series/" + serie.title.split(' ').map((word: string) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       const url = serie.title.split(' ').map((word: string) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
       if (!episodes) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
@@ -118,7 +130,7 @@ class adminRoutes {
         });
 
         if (!data || error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload do vídeo!', error });
-
+        
         fs.unlinkSync(ep.path);
       })
 
@@ -129,7 +141,7 @@ class adminRoutes {
           let ep = new Episode({
             title: req.body["ep-" + (index + 1) + "-title"],
             description: req.body["ep-" + (index + 1) + "-description"],
-            url: dist + "/season-" + seasonsQuantity + "/ep-" + (index + 1) + "." + episodes[index].mimetype.split('/')[1],
+            url: process.env.STORAGE + "/Semioflix/series/" + url + "/season-" + seasonsQuantity + "/ep-" + (index + 1) + "." + episodes[index].mimetype.split('/')[1],
             visible: req.body["ep-" + (index + 1) + "-visible"],
           })
 

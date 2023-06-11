@@ -125,9 +125,15 @@ style.
     font-size: 14px;
     font-weight: 400;
   }
+
+  li.link {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
   
 .menu-bar 
-  a(href="/", class="logo")
+  a(href="/admin", class="logo")
     img(class="icon", src="/public/images/semioflix-transparent.png", alt="Semioflix icon") 
   .search-serie 
     i.fas.fa-search
@@ -188,7 +194,7 @@ style.
               div.classList.add('result');
               
               div.innerHTML = `
-                <a href="/serie/${serie.id}">
+                <a href="/admin/serie/${serie.id}">
                   <img class="serie-cover" src="${serie.cover}" alt="${serie.title}">
                   <div>
                     <h3 class="serie-title">${serie.title}</h3>

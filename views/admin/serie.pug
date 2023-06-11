@@ -654,6 +654,7 @@ block content
     img(class="serie-cover", src="/public/images/semioflix.png", alt=title)
 
     button#add-movie-button <i class="fas fa-folder-plus"></i> Criar nova temporada
+    a.btn-link(href="/admin/serie/delete/" +  serie.id) <i class="fas fa-trash-alt"></i> Deletar série
 
     .modal-new-movie
       form(method="post", action="/admin/season/create", enctype="multipart/form-data")
@@ -851,7 +852,7 @@ block content
             </div>
           `;
 
-          input.after(myVideo);          
+          input.parentElement.appendChild(myVideo);         
         });
       });
 

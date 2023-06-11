@@ -99,7 +99,7 @@ class AuthenticateRoutes {
         accesses: []
       });
 
-      userme.setAvatar(process.env.STORAGE_URL + _optionalChain([avatar, 'optionalAccess', _5 => _5.Key]) );
+      userme.setAvatar(process.env.STORAGE + _optionalChain([avatar, 'optionalAccess', _5 => _5.Key]) );
 
       userme.setAccesses(new (0, _User.Accesses)({
         date: new Date(),

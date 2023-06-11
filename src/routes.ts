@@ -4,6 +4,8 @@ import { Serie } from "./database/models/Serie";
 
 import adminRoutes from "./routes/admin.routes";
 import authenticateRoutes from "./routes/authenticate.routes";
+import { Episode } from "./database/models/Episode";
+import { Season } from "./database/models/Season";
 
 class generalRoutes {
   public routes: Router = Router();
@@ -72,6 +74,15 @@ class generalRoutes {
 
       const { data: season } = await connection.from("Seasons").select("*").eq("id", seasonId).single();
       const ep = season.episodes.find((ep: any) => ep.id === epId);
+
+      const se = new Season(season);
+      
+      const episode = new Episode(ep);
+      episode.setViews(Number(episode.views) + 1);
+      
+      se.updateEpisode(epId, episode);
+
+      const { data: seasonData, error: seasonError } = await connection.from("Seasons").update(se).eq("id", seasonId);
       
       return res.render("pages/watch", {
         title: ep.title,

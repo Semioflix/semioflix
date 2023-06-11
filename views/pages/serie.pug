@@ -168,6 +168,10 @@ block content
       color: #999;
       margin-bottom: 18px;
     }
+
+    .episode-no-visible {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
       
   include ../bar.pug
 
@@ -195,13 +199,21 @@ block content
       each season, index in serie.Seasons
         div.serie-episodes(data-season="season"+ index, class=(index == 0 ? "active" : ""))
           each episode, index2 in season.episodes
-            div.serie-episode
-              a(href="/watch/" + season.id + "/" + episode.id)
-                img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
-              div.serie-episode-infos
-                h3.serie-episode-title Episódio 1: #{episode.title} 
-                p.serie-episode-description #{episode.description}
-                a.serie-btn-play(href="/watch/" + season.id + "/" + episode.id) <i class="fas fa-play"></i> Assistir 
+            div.serie-episode(class=episode.visible === "true" ? "" : "episode-no-visible")
+              if episode.visible === "true"
+                a(href="/watch/" + season.id + "/" + episode.id)
+                  img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
+                div.serie-episode-infos
+                  h3.serie-episode-title Episódio #{index2 + 1}: #{episode.title} 
+                  p.serie-episode-description #{episode.description}
+                  a.serie-btn-play(href="/watch/" + season.id + "/" + episode.id) <i class="fas fa-play"></i> Assistir 
+              else
+                a
+                  img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
+                div.serie-episode-infos
+                  h3.serie-episode-title Episódio #{index2 + 1}: #{episode.title} 
+                  p.serie-episode-description #{episode.description}
+                  a.serie-btn-play() <i class="fas fa-play"></i> Assistir 
 
   script. 
     const btnSeasons = document.querySelectorAll("[data-btn-season]");

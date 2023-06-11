@@ -99,7 +99,7 @@ class AuthenticateRoutes {
         accesses: []
       });
 
-      userme.setAvatar(process.env.STORAGE_URL + avatar?.Key as string);
+      userme.setAvatar(process.env.STORAGE + avatar?.Key as string);
 
       userme.setAccesses(new Accesses({
         date: new Date(),

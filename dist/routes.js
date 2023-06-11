@@ -4,6 +4,8 @@ var _Serie = require('./database/models/Serie');
 
 var _adminroutes = require('./routes/admin.routes'); var _adminroutes2 = _interopRequireDefault(_adminroutes);
 var _authenticateroutes = require('./routes/authenticate.routes'); var _authenticateroutes2 = _interopRequireDefault(_authenticateroutes);
+var _Episode = require('./database/models/Episode');
+var _Season = require('./database/models/Season');
 
 class generalRoutes {
    __init() {this.routes = _express.Router.call(void 0, )}
@@ -72,6 +74,15 @@ class generalRoutes {
 
       const { data: season } = await _connection.connection.from("Seasons").select("*").eq("id", seasonId).single();
       const ep = season.episodes.find((ep) => ep.id === epId);
+
+      const se = new (0, _Season.Season)(season);
+      
+      const episode = new (0, _Episode.Episode)(ep);
+      episode.setViews(Number(episode.views) + 1);
+      
+      se.updateEpisode(epId, episode);
+
+      const { data: seasonData, error: seasonError } = await _connection.connection.from("Seasons").update(se).eq("id", seasonId);
       
       return res.render("pages/watch", {
         title: ep.title,
