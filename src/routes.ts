@@ -76,14 +76,8 @@ class generalRoutes {
       const ep = season.episodes.find((ep: any) => ep.id === epId);
 
       const se = new Season(season);
-      
       const episode = new Episode(ep);
-      episode.setViews(Number(episode.views) + 1);
-      
-      se.updateEpisode(epId, episode);
-
-      const { data: seasonData, error: seasonError } = await connection.from("Seasons").update(se).eq("id", seasonId);
-      
+                  
       return res.render("pages/watch", {
         title: ep.title,
         imports: "watch",
@@ -91,6 +85,20 @@ class generalRoutes {
         season
       });
     });
+
+    this.routes.post("/episode/view", async (req: Request, res: Response) => {
+      const { seasonId, epId } = req.body;
+
+      const { data } = await connection.from("Seasons").select("*").eq("id", seasonId).single();
+
+      const season = new Season(data);
+      season.viewIncrement(epId);
+
+      const { data: seasonData, error: seasonError } = await connection.from("Seasons").update(season).eq("id", seasonId);
+
+      return res.json(seasonData);
+    });
+
   }
 }
 

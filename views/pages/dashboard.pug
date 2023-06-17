@@ -1,167 +1,5 @@
 extends ../layout
 block content
-  style. 
-    .content {
-      padding-top: 10px;
-      margin-top: 70px;
-    } 
-
-    .catalog-session {
-      margin: 30px 0 20px 0;
-      width: 100%;
-      padding: 20px;
-      position: relative;
-      height: 350px;
-    }
-
-    .catalog-title {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .catalog-title h1 {
-      font-size: 30px;
-      font-weight: 700;
-      padding-bottom: 15px;
-    }
-
-    .catalog-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: transparent;
-      border: none;
-      outline: none;
-      cursor: pointer;      
-      padding: 0 20px;
-      color: white;
-      z-index: 5;
-    }
-
-    .catalog-button i {
-      font-size: 30px;
-      margin-top: 70px;
-    }
-
-    .catalog-button i:hover {
-      color: #e50914;
-    }
-
-    .catalog-button:first-child {
-      left: 0;
-    }
-
-    .catalog-button:last-child {
-      right: 0;
-    }
-
-    .catalog-movies {
-      display: flex;
-      flex-wrap: no-wrap;
-      justify-content: left;
-      width: 96%;
-      height: 100%;
-      overflow-x: scroll;
-      scrollbar-width: none;
-      margin-left: 2%;
-    }
-
-    .catalog-movies::-webkit-scrollbar {
-      height: 5px;
-    }
-
-    .catalog-movies::-webkit-scrollbar-track {
-      background-color: transparent;
-    }
-
-    .catalog-movies::-webkit-scrollbar-thumb {
-      background-color: #e50914;
-      border-radius: 5px;
-    }
-
-    .catalog-movies::-webkit-scrollbar-thumb:hover {
-      background-color: #e50914;
-    }
-
-    .catalog-movies::-webkit-scrollbar-thumb:active {
-      background-color: #e50914;
-    }
-    
-    .catalog-movies::-webkit-scrollbar-thumb:window-inactive {
-      background-color: #e50914;
-    }
-
-    .catalog-movies::-webkit-scrollbar-thumb:horizontal {
-      border-radius: 5px;
-    }
-
-    .catalog-movies::-webkit-scrollbar-thumb:vertical {
-      border-radius: 5px;
-    }
-
-    .catalog-movies::-webkit-scrollbar-corner {
-      background-color: transparent;
-    }    
-
-    .movie {
-      width: 100%;
-      heigth: 620px !important;
-      max-width: 200px;
-      min-width: 200px;
-      margin-bottom: 20px;
-      background-color: #000;
-      position: relative;
-    }
-
-    .movie:not(:first-child) {
-      margin-left: 8px;
-    }
-
-    .movie a {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    .movie img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .movie:hover {
-      opacity: 0.7;
-      scale: 1.1;
-      transition: all 0.3s ease-in-out;
-    }
-
-    .movie:active {
-      opacity: 0.5;
-    }
-
-    .movie:focus {
-      opacity: 0.5;
-    }
-
-    .movie::-moz-focus-inner {
-      border: 0;
-    }
-
-    .alert-new-espisode {
-      position: absolute;
-      top: 0;
-      left: 0;
-      background-color: #e50914;
-      color: white;
-      padding: 5px 10px;
-      font-size: 12px;
-      font-weight: 700;
-      border-radius: 0 0 5px 0;
-      z-index: 100;
-    }
-    
   include ../bar.pug
   .content
       each a in [0, 1, 2, 3, 4]
@@ -177,14 +15,14 @@ block content
             each serie in series
               .movie
                 a(href="/serie/" + serie.id , title=serie.title)
-                  .alert-new-espisode New Episode
+                  .alert-new-espisode <i class="fab fa-medapps"></i> Novos episódios
                   img(src=serie.cover, alt="Movie")
 
             each p in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
               .movie
                 a(href="/serie/" + a, title="Movie " + p)
-                  .alert-new-espisode New Episode
-                  img(src="/public/images/semioflix.png", alt="Movie")
+                  .alert-new-espisode <i class="fab fa-medapps"></i>  episódios
+                  img(src="/public/images/semioflix-s.png", alt="Movie")
 
 
   script. 

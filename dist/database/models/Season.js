@@ -25,7 +25,7 @@ class Season  {
     serieId,
     createdAt,
     updatedAt,
-  }) {;Season.prototype.__init.call(this);Season.prototype.__init2.call(this);Season.prototype.__init3.call(this);Season.prototype.__init4.call(this);Season.prototype.__init5.call(this);Season.prototype.__init6.call(this);Season.prototype.__init7.call(this);Season.prototype.__init8.call(this);Season.prototype.__init9.call(this);Season.prototype.__init10.call(this);Season.prototype.__init11.call(this);Season.prototype.__init12.call(this);
+  }) {;Season.prototype.__init.call(this);Season.prototype.__init2.call(this);Season.prototype.__init3.call(this);Season.prototype.__init4.call(this);Season.prototype.__init5.call(this);Season.prototype.__init6.call(this);Season.prototype.__init7.call(this);Season.prototype.__init8.call(this);Season.prototype.__init9.call(this);Season.prototype.__init10.call(this);Season.prototype.__init11.call(this);Season.prototype.__init12.call(this);Season.prototype.__init13.call(this);
     this.id = id || _uuid.v4.call(void 0, );
     this.title = title;
     this.episodes = episodes || [];
@@ -52,8 +52,18 @@ class Season  {
   
    __init10() {this.getCreatedAt = () => this.createdAt}
 
-   __init11() {this.getUpdatedAt = () => this.updatedAt}
-   __init12() {this.setUpdatedAt = () => this.updatedAt = new Date()}
+   __init11() {this.viewIncrement = (episodeId) => {
+    const episodeIndex = this.episodes.findIndex(episode => new (0, _Episode.Episode)(episode).getId() === episodeId);
+
+    const episode = new (0, _Episode.Episode)(this.episodes[episodeIndex]);
+    episode.setViews(Number(episode.getViews()) + 1);
+    this.episodes[episodeIndex] = episode;
+    
+    this.setUpdatedAt();
+  }}
+
+   __init12() {this.getUpdatedAt = () => this.updatedAt}
+   __init13() {this.setUpdatedAt = () => this.updatedAt = new Date()}
 }
 
 exports.Season = Season;

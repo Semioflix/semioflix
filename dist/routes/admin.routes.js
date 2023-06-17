@@ -85,6 +85,36 @@ class adminRoutes {
       return res.status(200).redirect("/admin/serie/" + serie.getId());
     });
 
+    this.routes.post("/serie/update", _uploads.uploadImage.single('cover'), async (req, res) => {
+
+      const { id, title, description, cast, visible } = req.body;
+      const cover = req.file;
+
+      if (!id || !title || !description || !cast || !visible) return res.status(400).json({ message: 'Ops! Você deve preencher todos os campos para continuar!' });
+      if (!cover) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
+
+      const dist = title.split(' ').map((word) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+      _fs2.default.unlinkSync(cover.path);
+
+      const { data: serieFinded } = await _connection.connection.from("Series").select("*").eq("id", id).single();
+
+        const serie = new (0, _Serie.Serie)({
+          ...serieFinded,
+          title,
+          description,
+          cast,
+          visible
+      })
+
+      const { data: serieData, error: serieError } = await _connection.connection.from("Series").update(serie).match({ id });
+
+      if (serieError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao criar a série!', serieError });
+
+
+      return res.status(200).redirect("/admin/serie/" + serie.getId());
+    });
+
     this.routes.get("/serie/delete/:id", _uploads.uploadImage.single('cover'), async (req, res) => {
       const { id } = req.params;
 

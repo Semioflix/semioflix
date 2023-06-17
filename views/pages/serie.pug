@@ -1,180 +1,6 @@
 extends ../layout
 block content
-  style. 
-    .content {
-      padding: 80px 0 0 0;
-    }
-
-    .serie-cover {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-    }
-
-    .serie-infos {
-      padding: 0 20px;
-    }
-
-    .serie-title {
-      font-size: 40px;
-      font-weight: 700;
-      padding: 20px 0 0 0;
-    }
-
-    .serie-createdBy {
-      color: #999;
-      padding-bottom: 20px;
-    }
-
-    .serie-description {
-      font-size: 20px;
-      padding-bottom: 20px;
-    }
-
-    .serie-metrics {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 20px 0;
-    }
-
-    .serie-metric {
-      margin-right: 20px;
-    }
-
-    .serie-metric i {
-      margin-right: 5px;
-    }
-
-    .serie-metric:last-child {
-      margin-right: 0;
-    }
-
-    .serie-metric:hover {
-      color: #e50914;
-    }
-
-    .serie-metric:hover i {
-      color: #e50914;
-    }
-
-    .serie-metric:hover span {
-      color: #e50914;
-    }
-
-    .serie-metric:hover span i {
-      color: #e50914;
-    }
-
-    .serie-metric span {
-      font-size: 20px;
-    }
-
-    .serie-cast {
-      font-size: 18px;
-      padding: 20px 0;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    .serie-btn-play {
-      width: 100%;
-      background-color: #e50914;
-      color: white;
-      border: none;
-      outline: none;
-      padding: 10px 20px;
-      font-size: 20px;
-      font-weight: 700;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .serie-seasons {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 20px 0;
-    }
-
-    .btn-serie-season {
-      background-color: transparent;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      font-size: 20px;
-      color: #999;
-      border: none;
-      border-bottom: 2px solid transparent;
-    }
-
-    .btn-serie-season:hover {
-      color: #e50914;
-    }
-
-    .btn-serie-season.active {
-      color: #e50914;
-      border-bottom: 2px solid #e50914;
-    }
-
-    .serie-episodes {
-      padding: 20px 0;
-      display: none;
-    }
-
-    .serie-episodes.active {
-      display: block;
-    }
-
-    .serie-episode {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding: 10px 0;
-      border-bottom: 1px solid #999;
-    }
-
-    .serie-episode:last-child {
-      border-bottom: none;
-    }
-
-    .serie-episode-cover {
-      width: 400px;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .serie-episode-infos {
-      padding: 0 20px;
-    }
-
-    .serie-episode-title {
-      font-size: 20px;
-      margin-bottom: 8px;
-    }
-
-    .serie-episode-title:hover {
-      color: #e50914;
-    }
-
-    .serie-episode-title:hover {
-      color: #e50914;
-    }
-
-    .serie-episode-description {
-      font-size: 16px;
-      color: #999;
-      margin-bottom: 18px;
-    }
-
-    .episode-no-visible {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-      
   include ../bar.pug
-
 
   .content 
     img(class="serie-cover", src="/public/images/semioflix.png", alt=title)
@@ -188,32 +14,37 @@ block content
         span.serie-metric <i class="fas fa-eye"></i> #{serie.views}
       p.serie-cast 
         strong Estrelando: #{serie.cast}
-      button.serie-btn-play <i class="fas fa-play"></i> Assistir 
+
+      if serie.Seasons.length > 0
+        a.serie-btn-play.d-flex-center(href="/watch/" + serie.Seasons[0].id + "/" + serie.Seasons[0].episodes[0].id) <i class="fas fa-play"></i> Assistir 
 
       h2.serie-title Temporadas & Episódios
 
       div.serie-seasons 
         each season, index in serie.Seasons
           button(class="btn-serie-season " + (index == 0 ? "active" : "") , data-btn-season="season"+ index) Temporada #{index + 1}: #{season.title}
-
-      each season, index in serie.Seasons
-        div.serie-episodes(data-season="season"+ index, class=(index == 0 ? "active" : ""))
-          each episode, index2 in season.episodes
-            div.serie-episode(class=episode.visible === "true" ? "" : "episode-no-visible")
-              if episode.visible === "true"
-                a(href="/watch/" + season.id + "/" + episode.id)
-                  img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
-                div.serie-episode-infos
-                  h3.serie-episode-title Episódio #{index2 + 1}: #{episode.title} 
-                  p.serie-episode-description #{episode.description}
-                  a.serie-btn-play(href="/watch/" + season.id + "/" + episode.id) <i class="fas fa-play"></i> Assistir 
-              else
-                a
-                  img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
-                div.serie-episode-infos
-                  h3.serie-episode-title Episódio #{index2 + 1}: #{episode.title} 
-                  p.serie-episode-description #{episode.description}
-                  a.serie-btn-play() <i class="fas fa-play"></i> Assistir 
+    
+      if serie.Seasons.length === 0
+        h3.serie-episode-title Não há episódios disponíveis no momento.
+      else
+        each season, index in serie.Seasons
+          div.serie-episodes(data-season="season"+ index, class=(index == 0 ? "active" : ""))
+            each episode, index2 in season.episodes
+              div.serie-episode(class=episode.visible === "true" ? "" : "episode-no-visible")
+                if episode.visible === "true"
+                  a(href="/watch/" + season.id + "/" + episode.id)
+                    img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
+                  div.serie-episode-infos
+                    h3.serie-episode-title Episódio #{index2 + 1}: #{episode.title} 
+                    p.serie-episode-description #{episode.description}
+                    a.serie-btn-play(href="/watch/" + season.id + "/" + episode.id) <i class="fas fa-play"></i> Assistir 
+                else
+                  a
+                    img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
+                  div.serie-episode-infos
+                    h3.serie-episode-title Episódio #{index2 + 1}: #{episode.title} 
+                    p.serie-episode-description #{episode.description}
+                    a.serie-btn-play() <i class="fas fa-play"></i> Assistir 
 
   script. 
     const btnSeasons = document.querySelectorAll("[data-btn-season]");

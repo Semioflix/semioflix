@@ -52,6 +52,16 @@ class Season implements ISeason {
   
   public getCreatedAt = (): Date => this.createdAt;
 
+  public viewIncrement = (episodeId: string) => {
+    const episodeIndex = this.episodes.findIndex(episode => new Episode(episode).getId() === episodeId);
+
+    const episode = new Episode(this.episodes[episodeIndex]);
+    episode.setViews(Number(episode.getViews()) + 1);
+    this.episodes[episodeIndex] = episode;
+    
+    this.setUpdatedAt();
+  };
+
   public getUpdatedAt = (): Date => this.updatedAt;
   public setUpdatedAt = (): Date => this.updatedAt = new Date();
 }

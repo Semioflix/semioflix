@@ -5,10 +5,16 @@ html(lang="pt")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Semioflix | #{title}
-    link(rel="shortcut icon", href="/public/images/semioflix-transparent.png", type="image/x-icon")
+    link(rel="shortcut icon", href="/public/images/semioflix-s.png", type="image/x-icon")
     link(rel="stylesheet", href="/public/css/all.css")
     link(rel="stylesheet", href="/public/css/" + imports + ".css")
     link(rel="stylesheet", href="/fontawesome/css/all.css")
-    script(async, src="/public/js/all.js")
+    script(defer, src="/public/js/all.js")
+
+    meta(property="og:title", content="Semioflix")
+    meta(property="og:description", content="Semioflix é uma plataforma de streaming de séries voltadas para o ensino da semiologia para enfermagem. Desenvolvidas por alunos da Universidade Federal de Campina Grande (UFCG), campus de Cuite.")
+    meta(property="og:image", content="https://semioflix.onrender.com/public/images/semioflix-transparent.png")
+    meta(property="og:url", content="https://semioflix.onrender.com/")
+
   body
     block content

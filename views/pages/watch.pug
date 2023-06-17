@@ -1,53 +1,11 @@
 extends ../layout
 block content
-  style. 
-    .content {
-      padding: 80px 20px 0 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .content video {
-      width: 1200px;
-      height: 600px;
-      object-fit: cover;
-    }
-
-    .content h2 {
-      font-size: 40px;
-      font-weight: 700;
-      padding: 20px 0 0 0;
-    }
-
-    .content p {
-      color: #999;
-      padding-bottom: 20px;
-    }
-
-    .content .serie-metrics {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 20px 0;
-    }
-
-    .content .serie-metric {
-      margin-right: 20px;
-    }
-    
-    .content .serie-metric i {
-      margin-right: 5px;
-    }
-
   include ../bar.pug
-  
-  .content 
+  .content
     video#videoPlayer(src=ep.url, controls, autoplay)
       source(src=ep.url, type="video/mp4")
       object(data="", width="320", height="240")
-        embed(src=ep.url, width="320", height="240")        
+        embed(src=ep.url, width="320", height="240")
 
     h2.title #{ep.title}
     p.episode-createdBy #{new Date(ep.createdAt).getFullYear()}
@@ -62,3 +20,74 @@ block content
       .serie-metric
         i.fas.fa-share-alt
         | #{ep.shares}
+
+    - let nextEp = season.episodes[season.episodes.indexOf(ep) + 1] || null;
+
+    if nextEp != null
+      #next-ep-alert
+        h2 Assista ao próximo episódio
+        .next-ep-alert-title
+          h4 #{nextEp.title}
+        .next-ep-alert-description
+          p #{nextEp.description}
+        .next-ep-alert-button
+          a(href=`/watch/${season.id}/${nextEp.id}`) Assistir ao próximo episódio
+          button#nextEpAlertClose.btn.btn-red
+            i.fas.fa-times
+
+    .catalog-session
+      each episode in season.episodes
+        .catalog-item(class=`${episode.id == ep.id ? 'current' : ''}`)
+          a.catalog-item(href=`/watch/${season.id}/${episode.id}`)
+            img.catalog-img(src="/public/images/semioflix-s.png")
+            .catalog-info
+              h3.catalog-title #{episode.title}
+              .catalog-metrics
+                .catalog-metric
+                  i.fas.fa-thumbs-up
+                  | #{episode.likes}
+                .catalog-metric
+                  i.fas.fa-eye
+                  | #{episode.views}
+                .catalog-metric
+                  i.fas.fa-share-alt
+                  | #{episode.shares}
+
+  script.
+    const nextEpAlert = document.querySelector('#next-ep-alert');
+    const nextEpAlertClose = document.querySelector('#nextEpAlertClose');
+    const videoPlayer = document.querySelector('#videoPlayer');
+
+    // quando o usuário assistir 80% do episódio, exibir o alerta
+
+    videoPlayer.addEventListener('timeupdate', () => {
+      if (!nextEpAlert) return;
+      
+      if (videoPlayer.currentTime >= videoPlayer.duration * 0.9) {
+        nextEpAlert.style.display = 'flex';
+      }
+    });
+
+    // quando o usuário assistir 50% do episódio, registrar a visualização
+
+    let view = false;
+
+    videoPlayer.addEventListener('timeupdate', () => {
+      if (videoPlayer.currentTime >= videoPlayer.duration * 0.5 && !view) {
+        view = true;
+        fetch('/episode/view', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            epId: '#{ep.id}',
+            seasonId: '#{season.id}',
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+      }
+    });

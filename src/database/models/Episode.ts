@@ -28,7 +28,7 @@ class Episode {
     title,
     description,
     url,
-    likes,  
+    likes,
     views,
     visible,
     createdAt,
@@ -82,7 +82,7 @@ class Episode {
     this.setUpdatedAt();
     return this.visible;
   }
-  
+
   public getCreatedAt = (): Date => this.createdAt;
 
   public getUpdatedAt = (): Date => this.updatedAt;

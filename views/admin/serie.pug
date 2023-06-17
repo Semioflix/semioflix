@@ -1,669 +1,18 @@
 extends ../layout
-block content
-  style. 
-    .content {
-      padding: 80px 0 0 0;
-    }
-
-    .serie-cover {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-    }
-
-    .serie-infos {
-      padding: 0 20px;
-    }
-
-    .serie-title {
-      font-size: 40px;
-      font-weight: 700;
-      padding: 20px 0 0 0;
-    }
-
-    .serie-createdBy {
-      color: #999;
-      padding-bottom: 20px;
-    }
-
-    .serie-description {
-      font-size: 20px;
-      padding-bottom: 20px;
-    }
-
-    .serie-metrics {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 20px 0;
-    }
-
-    .serie-metric {
-      margin-right: 20px;
-    }
-
-    .serie-metric i {
-      margin-right: 5px;
-    }
-
-    .serie-metric:last-child {
-      margin-right: 0;
-    }
-
-    .serie-metric:hover {
-      color: #e50914;
-    }
-
-    .serie-metric:hover i {
-      color: #e50914;
-    }
-
-    .serie-metric:hover span {
-      color: #e50914;
-    }
-
-    .serie-metric:hover span i {
-      color: #e50914;
-    }
-
-    .serie-metric span {
-      font-size: 20px;
-    }
-
-    .serie-cast {
-      font-size: 18px;
-      padding: 20px 0;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    .serie-btn-play {
-      width: 100%;
-      background-color: #e50914;
-      color: white;
-      border: none;
-      outline: none;
-      padding: 10px 20px;
-      font-size: 20px;
-      font-weight: 700;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .serie-seasons {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 20px 0;
-    }
-
-    .btn-serie-season {
-      background-color: transparent;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      font-size: 20px;
-      color: #999;
-      border: none;
-      border-bottom: 2px solid transparent;
-    }
-
-    .btn-serie-season:hover {
-      color: #e50914;
-    }
-
-    .btn-serie-season.active {
-      color: #e50914;
-      border-bottom: 2px solid #e50914;
-    }
-
-    .serie-episodes {
-      padding: 20px 0;
-      display: none;
-    }
-
-    .serie-episodes.active {
-      display: block;
-    }
-
-    .serie-episode {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding: 10px 0;
-      border-bottom: 1px solid #999;
-    }
-
-    .serie-episode:last-child {
-      border-bottom: none;
-    }
-
-    .serie-episode-cover {
-      width: 400px;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .serie-episode-infos {
-      padding: 0 20px;
-    }
-
-    .serie-episode-title {
-      font-size: 20px;
-      margin-bottom: 8px;
-    }
-
-    .serie-episode-title:hover {
-      color: #e50914;
-    }
-
-    .serie-episode-title:hover {
-      color: #e50914;
-    }
-
-    .serie-episode-description {
-      font-size: 16px;
-      color: #999;
-      margin-bottom: 18px;
-    }
-
-
-
-    
-    #add-movie-button {
-      background-color: #e50914;
-      color: white;
-      border: none;
-      outline: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: 700;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
-
-    #add-movie-button:hover {
-      background-color: #e50914;
-      opacity: 0.7;
-    }
-
-    #add-movie-button:active {
-      background-color: #e50914;
-      opacity: 0.5;
-    }
-
-    #add-movie-button:focus {
-      background-color: #e50914;
-      opacity: 0.5;
-    }
-
-    #add-movie-button::-moz-focus-inner {
-      border: 0;
-    }
-
-    .modal-new-movie {
-      display: none;
-      position: absolute;
-      z-index: 3000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: fit-content;
-      min-height: 100%;
-      background-color: rgb(0,0,0);
-      background-color: rgba(0,0,0,0.4);
-      color: black;
-    }
-
-    .modal-content {
-      position: relative;
-      background-color: #fefefe;
-      margin: 20px auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      border-radius: 6px;
-      box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.5);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .modal-header h2 {
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .modal-body {
-      margin-bottom: 20px;
-      width: 100%;
-      height: 85%;
-    }
-
-    .modal-body p {
-      font-size: 16px;
-      font-weight: 400;
-    }
-
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-    }
-
-    .modal-footer button {
-      background-color: #e50914;
-      color: white;
-      border: none;
-      outline: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      font-weight: 700;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-
-    .modal-footer button:hover {
-      background-color: #e50914;
-      opacity: 0.7;
-    }
-
-    .modal-footer button:active {
-      background-color: #e50914;
-      opacity: 0.5;
-    }
-
-    .modal-footer button:focus {
-      background-color: #e50914;
-      opacity: 0.5;
-    }
-
-    .modal-footer button::-moz-focus-inner {
-      border: 0;
-    }
-
-    .modal-footer button.btn-cancel {
-      background-color: #333;
-    }
-
-    .modal-footer button.btn-cancel:hover {
-      background-color: #333;
-      opacity: 0.7;
-    }
-
-    .modal-footer button.btn-cancel:active {
-      background-color: #333;
-      opacity: 0.5;
-    }
-
-    .modal-footer button.btn-cancel:focus {
-      background-color: #333;
-      opacity: 0.5;
-    }
-
-    .modal-footer button.btn-cancel::-moz-focus-inner {
-      border: 0;
-    }
-
-    .modal-footer button.btn-add {
-      background-color: #4BB543;
-    }
-
-    .modal-footer button.btn-add:hover {
-      background-color: #4BB543;
-      opacity: 0.7;
-    }
-
-    .modal-footer button.btn-add:active {
-      background-color: #4BB543;
-      opacity: 0.5;
-    }
-
-    .modal-footer button.btn-add:focus {
-      background-color: #4BB543;
-      opacity: 0.5;
-    }
-
-    .modal-footer button.btn-add::-moz-focus-inner {
-      border: 0;
-    }
-
-    .modal-body .form-group {
-      margin-bottom: 20px;
-    }
-
-    .modal-body .form-group label {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    .modal-body .form-group input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-      font-size: 16px;
-      font-weight: 400;
-    }
-
-    .modal-body .form-group input:focus {
-      border: 1px solid #e50914;
-    }
-
-    .modal-body .form-group textarea {
-      width: 100%;
-      min-height: 100px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-      font-size: 16px;
-      font-weight: 400;
-      resize: none;
-    }
-
-    .modal-body .form-group textarea:focus {
-      border: 1px solid #e50914;
-    }
-
-    .modal-body .form-group select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-      font-size: 16px;
-      font-weight: 400;
-    }
-
-    .modal-body .form-group select:focus {
-      border: 1px solid #e50914;
-    }
-
-    .modal-body .form-group select option {
-      font-size: 16px;
-      font-weight: 400;
-    }
-
-    .modal-body .form-group .form-check {
-      display: flex;
-      align-items: center;
-    }
-
-    .modal-body .form-group .form-check input {
-      margin-right: 10px;
-    }
-
-    .modal-body .form-group .form-check label {
-      font-size: 16px;
-      font-weight: 400;
-    }
-
-    .modal-body .form-group .form-check input:focus {
-      border: 1px solid #e50914;
-    }
-
-    .modal-body .form-group .form-check input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-    }
-
-    .modal-body .form-group .form-check input[type="checkbox"]:checked {
-      background-color: #e50914;
-    }
-
-    .modal-body .form-group .form-check input[type="checkbox"]:checked:after {
-      content: "\f00c";
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
-      color: white;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      line-height: 20px;
-    }
-
-    .modal-body .form-group .form-check input[type="checkbox"]:checked:before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      line-height: 20px;
-    }
-
-    .modal-body input[type="file"] {
-      display: none;
-    }
-
-    .modal-body input[type="file"]+label {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-      font-size: 16px;
-      font-weight: 400;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .modal-body input[type="file"]+label:hover {
-      border: 1px solid #e50914;
-    }
-
-    .modal-body input[type="file"]+label:focus {
-      border: 1px solid #e50914;
-    }
-
-    .modal-body input[type="file"]+label span {
-      font-size: 16px;
-      font-weight: 400;
-    }
-
-    .modal-body .text-file-preview {
-      width: 100%;
-      height: 300px;
-      margin-top: 20px;
-      border: 4px dashed #ccc;
-      border-radius: 5px;
-      background-color: #eee;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-body .text-file-preview i {
-      font-size: 50px;
-      color: #ccc;
-      margin-right: 10px;
-    }
-
-    .image-preview {
-      width: 100%;
-      height: 300px;
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #eee;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      display: none;
-      position: relative;
-    }
-    
-
-    #image-preview {
-      width: 100%;
-      height: 100%;
-      border-radius: 5px;
-    }
-
-    #image-preview:hover {
-      opacity: 0.8;
-    }
-
-    .image-preview span {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      width: 100%;  
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      color: red;
-      font-size: 40px;
-      font-weight: 900;
-      border: 4px dashed red;
-      border-radius: 5px;
-      background-color: rgba(255, 255, 255, 0.8);
-    }
-
-    .image-preview span i {
-      margin-right: 10px;
-    }
-
-    #image-preview:hover + span,
-    #image-preview + span:hover {
-      display: flex;
-    }
-
-    .episode {
-      height: 350px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      border-bottom: 1px solid #ccc;
-      margin-top: 10px;
-    }
-
-    .episode:last-child {
-      border-bottom: none;
-    }
-
-    .episode .updated {
-      margin: 10px 0 0 20px;
-      width: 40%;
-      height: 100%;
-    }
-
-    .episode .updated .video-preview {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 96%;  
-      height: 80%;
-      margin-top: 10px;
-      background-color: #eee;
-      padding: 10px;
-      border-radius: 5px;
-      border: 5px dashed #ccc;
-    }
-    
-    .episode .updated .video-preview i {
-      margin-right: 8px;
-    }
-
-    .episode .updated-infos {
-      margin-right: 20px;
-      width: 60%;
-    }
-
-    .btn-remove-episode,
-    .btn-move-up-episode,
-    .btn-move-down-episode {
-      outline: none;
-      color: white;
-      font-size: 16px;
-      font-weight: 900;
-      cursor: pointer;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-    }
-
-    .btn-remove-episode {
-      background-color: #e50914;
-      margin-right: 10px;
-    }
-
-    .btn-remove-episode:hover {
-      background-color: #c5050c;
-    }
-
-    .btn-move-up-episode {
-      background-color: #4d7ea8;
-      margin-right: 10px;
-    }
-
-    .btn-move-up-episode:hover {
-      background-color: #3a5d7f;
-    }
-
-    .btn-move-down-episode {
-      background-color: #3d5a80;
-    }
-
-    .btn-move-down-episode:hover {
-      background-color: #2c4360;
-    }
-
-    /* botão mais pequeno */
-
-    .btn-remove-video {
-      outline: none;
-      color: white;
-      font-size: 16px;
-      font-weight: 900;
-      cursor: pointer;
-      padding: 5px;
-      border-radius: 5px;
-      border: none;
-    }
-
-    .btn-remove-video {
-      background-color: #e50914;
-      margin-right: 10px;
-    }
-
-    .btn-remove-video:hover {
-      background-color: #c5050c;
-    }
-          
+block content        
   include ../bar-admin.pug
 
   .content 
     img(class="serie-cover", src="/public/images/semioflix.png", alt=title)
 
-    button#add-movie-button <i class="fas fa-folder-plus"></i> Criar nova temporada
-    a.btn-link(href="/admin/serie/delete/" +  serie.id) <i class="fas fa-trash-alt"></i> Deletar série
-
-    .modal-new-movie
-      form(method="post", action="/admin/season/create", enctype="multipart/form-data")
+    button.btn.btn-green(data-modal-controller="modal-create-season") <i class="fas fa-folder-plus"></i> Criar nova temporada
+    .modal.modal-xxl(data-modal="modal-create-season")
+      form.modal-content(action="/admin/season/create", method="POST", enctype="multipart/form-data")
         input(type="hidden", name="serieId", value=serie.id)
-        .modal-content
-          .modal-header
-            h2 <i class="fas fa-video"></i> Crie um nova temporada
-            span.close-modal(x) &times;
-          .modal-body
+        .modal-header
+          h2 <i class="fas fa-folder-plus"></i> Criar nova temporada
+          button.modal-close <i class="fas fa-times-circle"></i>
+        .modal-body
             .form-group 
               label(for="title") <i class="fas fa-hashtag"></i> Título da temporada
               input#title.form-control(type="text", placeholder="Título da temporada", required, name="season-title")
@@ -688,11 +37,59 @@ block content
                     .form-group
                       button.btn-remove-episode(type="button", data-remove-ep="ep-" + index) <i class="fas fa-trash"></i> Remover episódio
                       button.btn-move-up-episode(type="button", data-move-up-ep="ep-" + index) <i class="fas fa-arrow-up"></i> Mover para cima
-                      button.btn-move-down-episode(type="button", data-move-down-ep="ep-" + index) <i class="fas fa-arrow-down"></i> Mover para baixo
-          .modal-footer
-            button.btn-cancel(type="button") Cancelar
-            button.btn-add#data-btn-add-ep(type="button") Adicionar novo episódio
-            button.btn-ok(type="submit") Ok
+                      button.btn-move-down-episode(type="button", data-move-down-ep="ep-" + index) <i class="fas fa-arrow-down"></i> Mover para baixo          
+        .modal-footer
+          button#data-btn-add-ep.btn.btn-blue(type="button") <i class="fas fa-folder-plus"></i> Inserir um novo episódio
+          button.btn.btn-red(type="button", data-modal-cancel="modal-create-season") <i class="fas fa-times-circle"></i> Cancelar
+          button.btn.btn-green(type="submit") <i class="fas fa-check-circle"></i> Finalizar
+    
+    button(type="button", class="btn btn-red", data-modal-controller="modal-delete-serie") <i class="fas fa-trash-alt"></i> Deletar série
+    .modal.modal-md(data-modal="modal-delete-serie")
+      .modal-content
+        .modal-header
+          h2 <i class="fas fa-trash-alt"></i> Deletar série
+          button.modal-close <i class="fas fa-times-circle"></i>
+        .modal-body
+          p <i class="fas fa-exclamation-triangle"></i> Tem certeza que deseja deletar a série <strong>#{serie.title}</strong>?  
+        .modal-footer
+          button.btn.btn-blue(type="button", data-modal-cancel="modal-delete-serie") <i class="fas fa-times-circle"></i> Não, cancelar
+          a.btn-link.btn-green(href="/admin/serie/delete/" +  serie.id) <i class="fas fa-check-circle"></i> SIm, deletar série
+
+    button(type="button", class="btn btn-blue", data-modal-controller="modal-edit-serie") <i class="fas fa-edit"></i> Editar série
+    .modal.modal-xxl(data-modal="modal-edit-serie")
+      form.modal-content(action="/admin/serie/update", method="POST", enctype="multipart/form-data")
+        input(type="hidden", name="id", value=serie.id)
+        .modal-header
+          h2 <i class="fas fa-edit"></i> Editar série
+          button.modal-close <i class="fas fa-times-circle"></i>
+        .modal-body
+          .row 
+            .d-flex-column-center.w-25
+              img(class="", src=serie.cover, alt=serie.title, width="150px")
+              .form-group 
+                label(for="cover") <i class="fas fa-image"></i> Capa
+                input#cover.form-control(type="file", placeholder="Capa da série", name="cover")
+            .w-75
+              .form-group 
+                label(for="title") <i class="fas fa-hashtag"></i> Título
+                input#title.form-control(type="text", placeholder="Título da série", required, name="title", value=serie.title)
+              .form-group
+                label(for="description") <i class="fas fa-align-justify"></i> Descrição
+                textarea#description.form-control(placeholder="Descrição da série", required, name="description") #{serie.description}
+              .form-group
+                label(for="cast") <i class="fas fa-users-rectangle"></i> Elenco
+                input#cast.form-control(type="text", placeholder="Elenco da série", required, name="cast", value=serie.cast)
+              .form-group
+                label(for="disponible") <i class="fas fa-play"></i> Disponível para assistir?
+                select#disponible.form-control(name="visible", required, value=serie.visible)
+                  option(value="true") Sim
+                  option(value="false") Não
+              //- .form-group#image-group
+              //-   label.text-file-preview(for="image") <i class="fas fa-images"></i> Clique para selecionar uma imagem
+              //-   input#image.form-control(type="file", accept="image/*", name="cover", required)                          
+
+          button.btn.btn-red(type="button", data-modal-cancel="modal-edit-serie") <i class="fas fa-times-circle"></i> Cancelar
+          button.btn.btn-green(type="submit") <i class="fas fa-check-circle"></i> Finalizar
 
     .serie-infos
       h1.serie-title #{serie.title}
@@ -719,7 +116,7 @@ block content
               a(href="/watch/" + season.id + "/" + episode.id)
                 img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
               div.serie-episode-infos
-                h3.serie-episode-title Episódio 1: #{episode.title} 
+                h3.serie-episode-title Episódio #{index2 + 1}: #{episode.title} 
                 p.serie-episode-description #{episode.description}
                 a.serie-btn-play(href="/watch/" + season.id + "/" + episode.id) <i class="fas fa-play"></i> Assistir 
 
@@ -742,29 +139,29 @@ block content
       });
     });
 
-    document.querySelector("#add-movie-button").addEventListener("click", () => {
-      document.querySelector(".modal-new-movie").style.display = "block";
-    });
+    //- document.querySelector("#add-movie-button").addEventListener("click", () => {
+    //-   document.querySelector(".modal-new-movie").style.display = "block";
+    //- });
 
-    document.querySelector(".close-modal").addEventListener("click", () => {
-      document.querySelector(".modal-new-movie").style.display = "none";
-    });
+    //- document.querySelector(".close-modal").addEventListener("click", () => {
+    //-   document.querySelector(".modal-new-movie").style.display = "none";
+    //- });
 
-    window.addEventListener("click", (event) => {
-      if (event.target == document.querySelector(".modal-new-movie")) {
-        document.querySelector(".modal-new-movie").style.display = "none";
-      }
-    });
+    //- window.addEventListener("click", (event) => {
+    //-   if (event.target == document.querySelector(".modal-new-movie")) {
+    //-     document.querySelector(".modal-new-movie").style.display = "none";
+    //-   }
+    //- });
 
-    document.querySelector(".btn-cancel").addEventListener("click", () => {
-      document.querySelector(".modal-new-movie").style.display = "none";
-    });
+    //- document.querySelector(".btn-cancel").addEventListener("click", () => {
+    //-   document.querySelector(".modal-new-movie").style.display = "none";
+    //- });
 
-    document.querySelector(".modal-new-movie").addEventListener("keydown", (event) => {
-      if (event.key == "Escape" || event.key == "Esc") {
-        document.querySelector(".modal-new-movie").style.display = "none";
-      }
-    });
+    //- document.querySelector(".modal-new-movie").addEventListener("keydown", (event) => {
+    //-   if (event.key == "Escape" || event.key == "Esc") {
+    //-     document.querySelector(".modal-new-movie").style.display = "none";
+    //-   }
+    //- });
 
 
     let qtd = 1;
