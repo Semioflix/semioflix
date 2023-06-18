@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import { connection } from "../database/connection";
 import { authenticate } from "../database/authenticate";
-import { uploadImage, uploadVideo, uploadVideos } from "../database/uploads";
+import { uploadImage, uploadImages, uploadVideo, uploadVideos } from "../database/uploads";
 import { Season } from "../database/models/Season";
 import { Episode } from "../database/models/Episode";
 
@@ -49,37 +49,45 @@ class adminRoutes {
       });
     });
 
-    this.routes.post("/serie/create", uploadImage.single('cover'), async (req: Request, res: Response) => {
-
+    this.routes.post("/serie/create", uploadImages.fields([{ name: 'cover', maxCount: 1 }, { name: 'background', maxCount: 1 }]), async (req: Request, res: Response) => {
       const { title, description, cast, visible } = req.body;
-      const cover = req.file;
+      const cover = req.files?.cover[0];
+      const background = req.files?.background[0];
 
       if (!title || !description || !cast || !visible) return res.status(400).json({ message: 'Ops! Você deve preencher todos os campos para continuar!' });
       if (!cover) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
 
       const dist = title.split(' ').map((word: string) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      const { data, error } = await connection.storage.from("Semioflix").upload(`/series/${dist}/cover.${cover.mimetype.split('/')[1]}`, fs.readFileSync(cover.path), {
+      const { data: dataCover, error: coverError } = await connection.storage.from("Semioflix").upload(`/series/${dist}/cover.${cover.mimetype.split('/')[1]}`, fs.readFileSync(cover.path), {
         cacheControl: '3600',
         upsert: false,
         contentType: cover.mimetype
       });
 
-      if (error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload da imagem!', error });
+      const { data: dataBackground, error: backgroundError } = await connection.storage.from("Semioflix").upload(`/series/${dist}/background.${background.mimetype.split('/')[1]}`, fs.readFileSync(background.path), {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: background.mimetype
+      });
+
+      if (coverError || backgroundError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload da imagem!', error: coverError || backgroundError });
 
       fs.unlinkSync(cover.path);
+      fs.unlinkSync(background.path);
 
       const serie = new Serie({
         title,
         description,
         cast,
         visible,
-        cover: `${process.env.STORAGE}/${data?.Key}`
+        cover: `${process.env.STORAGE}/${dataCover?.Key}`,
+        background: `${process.env.STORAGE}/${dataBackground?.Key}`
       })
 
       const { data: serieData, error: serieError } = await connection.from("Series").insert(serie);
 
-      if (serieError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao criar a série!', error });
+      if (serieError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao criar a série!', serieError });
 
 
       return res.status(200).redirect("/admin/serie/" + serie.getId());
@@ -99,12 +107,12 @@ class adminRoutes {
 
       const { data: serieFinded } = await connection.from("Series").select("*").eq("id", id).single();
 
-        const serie = new Serie({
-          ...serieFinded,
-          title,
-          description,
-          cast,
-          visible
+      const serie = new Serie({
+        ...serieFinded,
+        title,
+        description,
+        cast,
+        visible
       })
 
       const { data: serieData, error: serieError } = await connection.from("Series").update(serie).match({ id });
@@ -119,13 +127,13 @@ class adminRoutes {
       const { id } = req.params;
 
       const { data: serie, error } = await connection.from("Series").select("*, Seasons(*)").eq("id", id).single();
-      
+
       if (error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao buscar a série!', error });
-      
+
       const dist = serie.title.split(' ').map((word: string) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
       const remove = await connection.storage.from("Semioflix")._removeEmptyFolders(`/series/${dist}`);
-      
+
       console.log(remove)
 
       const { data: serieData, error: serieError } = await connection.from("Series").delete().eq("id", id);
@@ -154,13 +162,13 @@ class adminRoutes {
       if (!episodes) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
 
       episodes.forEach(async (ep: any, index: number) => {
-        const { data, error } = await connection.storage.from("Semioflix").upload(`/series/${url}/season-${seasonsQuantity}/ep-${index + 1}.${ep.mimetype.split('/')[1]}`, fs.readFileSync(ep.path), {
+        const { data, error } = await connection.storage.from("Semioflix").upload(`/series/${url}/season-${seasonsQuantity}/episodes/ep-${index + 1}.${ep.mimetype.split('/')[1]}`, fs.readFileSync(ep.path), {
           cacheControl: '3600',
           upsert: false
         });
 
         if (!data || error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload do vídeo!', error });
-        
+
         fs.unlinkSync(ep.path);
       })
 
@@ -171,7 +179,7 @@ class adminRoutes {
           let ep = new Episode({
             title: req.body["ep-" + (index + 1) + "-title"],
             description: req.body["ep-" + (index + 1) + "-description"],
-            url: process.env.STORAGE + "/Semioflix/series/" + url + "/season-" + seasonsQuantity + "/ep-" + (index + 1) + "." + episodes[index].mimetype.split('/')[1],
+            url: process.env.STORAGE + "/Semioflix/series/" + url + "/season-" + seasonsQuantity + "/episodes/ep-" + (index + 1) + "." + episodes[index].mimetype.split('/')[1],
             visible: req.body["ep-" + (index + 1) + "-visible"],
           })
 

@@ -13,7 +13,9 @@
 
 
 
+
 class Serie  {
+  
   
   
   
@@ -31,17 +33,19 @@ class Serie  {
     description,
     cast,
     cover,
+    background,
     visible,
     likes,
     views,
     createdAt,
     updatedAt,
-  }) {;Serie.prototype.__init.call(this);Serie.prototype.__init2.call(this);Serie.prototype.__init3.call(this);Serie.prototype.__init4.call(this);Serie.prototype.__init5.call(this);Serie.prototype.__init6.call(this);Serie.prototype.__init7.call(this);Serie.prototype.__init8.call(this);Serie.prototype.__init9.call(this);Serie.prototype.__init10.call(this);Serie.prototype.__init11.call(this);Serie.prototype.__init12.call(this);Serie.prototype.__init13.call(this);Serie.prototype.__init14.call(this);Serie.prototype.__init15.call(this);Serie.prototype.__init16.call(this);Serie.prototype.__init17.call(this);Serie.prototype.__init18.call(this);
+  }) {;Serie.prototype.__init.call(this);Serie.prototype.__init2.call(this);Serie.prototype.__init3.call(this);Serie.prototype.__init4.call(this);Serie.prototype.__init5.call(this);Serie.prototype.__init6.call(this);Serie.prototype.__init7.call(this);Serie.prototype.__init8.call(this);Serie.prototype.__init9.call(this);Serie.prototype.__init10.call(this);Serie.prototype.__init11.call(this);Serie.prototype.__init12.call(this);Serie.prototype.__init13.call(this);Serie.prototype.__init14.call(this);Serie.prototype.__init15.call(this);Serie.prototype.__init16.call(this);Serie.prototype.__init17.call(this);Serie.prototype.__init18.call(this);Serie.prototype.__init19.call(this);Serie.prototype.__init20.call(this);
     this.id = id || _uuid.v4.call(void 0, );
     this.title = title;
     this.description = description;
     this.cast = cast;
     this.cover = cover;
+    this.background = background || "/public/images/semioflix-transparent.png";
     this.visible = visible || true;
     this.likes = likes || 0;
     this.views = views || 0;
@@ -75,22 +79,28 @@ class Serie  {
     this.setUpdatedAt();
   }}
 
-   __init10() {this.getVisible = () => this.visible || true}
-   __init11() {this.setVisible = (visible) => {
+   __init10() {this.getBackground = () => this.background || "/public/images/semioflix-transparent.png"}
+   __init11() {this.setBackground = (background) => {
+    this.background = background;
+    this.setUpdatedAt();
+  }}
+
+   __init12() {this.getVisible = () => this.visible || true}
+   __init13() {this.setVisible = (visible) => {
     this.visible = visible;
     this.setUpdatedAt();
   }}
 
-   __init12() {this.getLikes = () => this.likes || 0}
-   __init13() {this.setLikes = (likes) => this.likes = likes}
+   __init14() {this.getLikes = () => this.likes || 0}
+   __init15() {this.setLikes = (likes) => this.likes = likes}
 
-   __init14() {this.getViews = () => this.views || 0}
-   __init15() {this.setViews = (views) => this.views = views}
+   __init16() {this.getViews = () => this.views || 0}
+   __init17() {this.setViews = (views) => this.views = views}
 
-   __init16() {this.getCreatedAt = () => this.createdAt}
+   __init18() {this.getCreatedAt = () => this.createdAt}
 
-   __init17() {this.getUpdatedAt = () => this.updatedAt}
-   __init18() {this.setUpdatedAt = () => this.updatedAt = new Date()}
+   __init19() {this.getUpdatedAt = () => this.updatedAt}
+   __init20() {this.setUpdatedAt = () => this.updatedAt = new Date()}
 }
 
 exports.Serie = Serie;

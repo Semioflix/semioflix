@@ -32,6 +32,12 @@ block content
             .image-preview
               img#image-preview(src="", alt="Imagem de pré-visualização")
               span#image-change <i class="fas fa-edit"></i> Selecionar outra imagem
+            .form-group
+              label(for="background") <i class="fas fa-images"></i> Imagem de fundo
+              input#background.form-control(type="file", accept="image/*", name="background", required)            
+            .background-preview
+              img#background-preview(src="", alt="Imagem de pré-visualização")
+              span#background-change <i class="fas fa-edit"></i> Selecionar outra imagem
           .modal-footer
             button.btn-cancel(type="button") Cancelar
             button.btn-ok(type="submit") Ok
@@ -124,5 +130,29 @@ block content
         document.querySelector("#image-group").style.display = "block";
         document.querySelector("#image").click();
       });
+    });
 
+    document.querySelector("#background").addEventListener("change", () => {
+      const file = document.querySelector("#background").files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        document.querySelector("#background-preview").src = reader.result;
+        document.querySelector(".background-preview").style.display = "flex";
+        document.querySelector("#background-group").style.display = "none";
+      }
+
+      if (file) {
+        reader.readAsDataURL(file);
+      } else {
+        document.querySelector("#background-preview").src = "";
+      }
+
+      document.querySelector("#background-change").addEventListener("click", () => {
+        document.querySelector("#background").value = "";
+        document.querySelector("#background-preview").src = "";
+        document.querySelector(".background-preview").style.display = "none";
+        document.querySelector("#background-group").style.display = "block";
+        document.querySelector("#background").click();
+      });
     });

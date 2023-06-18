@@ -8,6 +8,7 @@ interface IEpisode {
   likes?: number;
   views?: number;
   visible?: boolean;
+  thumbnail?: string;
   readonly createdAt?: Date;
   updatedAt?: Date;
 }
@@ -20,6 +21,7 @@ class Episode {
   likes?: number;
   views?: number;
   visible?: boolean;
+  thumbnail?: string;
   readonly createdAt: Date;
   updatedAt: Date;
 
@@ -31,6 +33,7 @@ class Episode {
     likes,
     views,
     visible,
+    thumbnail,
     createdAt,
     updatedAt,
   }: IEpisode) {
@@ -41,6 +44,7 @@ class Episode {
     this.likes = likes || 0;
     this.views = views || 0;
     this.visible = visible || true;
+    this.thumbnail = thumbnail || "/public/images/semioflix-s.png";
     this.createdAt = createdAt || new Date();
     this.updatedAt = updatedAt || new Date();
   }
@@ -82,6 +86,13 @@ class Episode {
     this.setUpdatedAt();
     return this.visible;
   }
+
+  public getThumbnail = (): string => this.thumbnail || "/public/images/semioflix-s.png";
+  public setThumbnail = (thumbnail: string): string => {
+    this.thumbnail = thumbnail;
+    this.setUpdatedAt();
+    return this.thumbnail;
+  }  
 
   public getCreatedAt = (): Date => this.createdAt;
 

@@ -3,16 +3,11 @@ script(src="/public/js/bar.js", async)
 .menu-bar 
   a(href="/", class="logo")
     img(class="icon", src="/public/images/semioflix-transparent.png", alt="Semioflix icon") 
-  .search-serie 
-    i.fas.fa-search
-    input(type="text", placeholder="Encontre algo para assistir")
-    .search-result#search-result
-
   ul.menu-links 
     li.link
       a(href="/") 
         i.fas.fa-film
-        |  Séries
+        |  Início
     li.link   
       a(href="/about") 
         i.fas.fa-info-circle
@@ -25,5 +20,9 @@ script(src="/public/js/bar.js", async)
       a(href="/login") 
         i.fas.fa-sign-in-alt
         |  Acesse sua conta
+  .search-serie 
+    i.fas.fa-search
+    input(type="text", placeholder="Encontre algo para assistir")
+    .search-result#search-result
 
   script. 

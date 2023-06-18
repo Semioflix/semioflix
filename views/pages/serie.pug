@@ -3,7 +3,7 @@ block content
   include ../bar.pug
 
   .content 
-    img(class="serie-cover", src="/public/images/semioflix.png", alt=title)
+    img(class="serie-cover", src=serie.background, alt=title)
     .serie-infos
       h1.serie-title #{serie.title}
       small.serie-createdBy #{new Date(serie.createdAt).toLocaleDateString("pt-BR", { year: 'numeric', month: 'long', day: 'numeric' })} 
@@ -33,7 +33,7 @@ block content
               div.serie-episode(class=episode.visible === "true" ? "" : "episode-no-visible")
                 if episode.visible === "true"
                   a(href="/watch/" + season.id + "/" + episode.id)
-                    img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
+                    img(class="serie-episode-cover", src=episode.thumbnail, alt=episode.title)
                   div.serie-episode-infos
                     h3.serie-episode-title Episódio #{index2 + 1}: #{episode.title} 
                     p.serie-episode-description #{episode.description}

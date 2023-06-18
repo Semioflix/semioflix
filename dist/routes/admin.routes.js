@@ -49,37 +49,45 @@ class adminRoutes {
       });
     });
 
-    this.routes.post("/serie/create", _uploads.uploadImage.single('cover'), async (req, res) => {
-
+    this.routes.post("/serie/create", _uploads.uploadImages.fields([{ name: 'cover', maxCount: 1 }, { name: 'background', maxCount: 1 }]), async (req, res) => {
       const { title, description, cast, visible } = req.body;
-      const cover = req.file;
+      const cover = _optionalChain([req, 'access', _2 => _2.files, 'optionalAccess', _3 => _3.cover, 'access', _4 => _4[0]]);
+      const background = _optionalChain([req, 'access', _5 => _5.files, 'optionalAccess', _6 => _6.background, 'access', _7 => _7[0]]);
 
       if (!title || !description || !cast || !visible) return res.status(400).json({ message: 'Ops! Você deve preencher todos os campos para continuar!' });
       if (!cover) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
 
       const dist = title.split(' ').map((word) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      const { data, error } = await _connection.connection.storage.from("Semioflix").upload(`/series/${dist}/cover.${cover.mimetype.split('/')[1]}`, _fs2.default.readFileSync(cover.path), {
+      const { data: dataCover, error: coverError } = await _connection.connection.storage.from("Semioflix").upload(`/series/${dist}/cover.${cover.mimetype.split('/')[1]}`, _fs2.default.readFileSync(cover.path), {
         cacheControl: '3600',
         upsert: false,
         contentType: cover.mimetype
       });
 
-      if (error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload da imagem!', error });
+      const { data: dataBackground, error: backgroundError } = await _connection.connection.storage.from("Semioflix").upload(`/series/${dist}/background.${background.mimetype.split('/')[1]}`, _fs2.default.readFileSync(background.path), {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: background.mimetype
+      });
+
+      if (coverError || backgroundError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload da imagem!', error: coverError || backgroundError });
 
       _fs2.default.unlinkSync(cover.path);
+      _fs2.default.unlinkSync(background.path);
 
       const serie = new (0, _Serie.Serie)({
         title,
         description,
         cast,
         visible,
-        cover: `${process.env.STORAGE}/${_optionalChain([data, 'optionalAccess', _2 => _2.Key])}`
+        cover: `${process.env.STORAGE}/${_optionalChain([dataCover, 'optionalAccess', _8 => _8.Key])}`,
+        background: `${process.env.STORAGE}/${_optionalChain([dataBackground, 'optionalAccess', _9 => _9.Key])}`
       })
 
       const { data: serieData, error: serieError } = await _connection.connection.from("Series").insert(serie);
 
-      if (serieError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao criar a série!', error });
+      if (serieError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao criar a série!', serieError });
 
 
       return res.status(200).redirect("/admin/serie/" + serie.getId());
@@ -99,12 +107,12 @@ class adminRoutes {
 
       const { data: serieFinded } = await _connection.connection.from("Series").select("*").eq("id", id).single();
 
-        const serie = new (0, _Serie.Serie)({
-          ...serieFinded,
-          title,
-          description,
-          cast,
-          visible
+      const serie = new (0, _Serie.Serie)({
+        ...serieFinded,
+        title,
+        description,
+        cast,
+        visible
       })
 
       const { data: serieData, error: serieError } = await _connection.connection.from("Series").update(serie).match({ id });
@@ -119,13 +127,13 @@ class adminRoutes {
       const { id } = req.params;
 
       const { data: serie, error } = await _connection.connection.from("Series").select("*, Seasons(*)").eq("id", id).single();
-      
+
       if (error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao buscar a série!', error });
-      
+
       const dist = serie.title.split(' ').map((word) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
       const remove = await _connection.connection.storage.from("Semioflix")._removeEmptyFolders(`/series/${dist}`);
-      
+
       console.log(remove)
 
       const { data: serieData, error: serieError } = await _connection.connection.from("Series").delete().eq("id", id);
@@ -154,13 +162,13 @@ class adminRoutes {
       if (!episodes) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
 
       episodes.forEach(async (ep, index) => {
-        const { data, error } = await _connection.connection.storage.from("Semioflix").upload(`/series/${url}/season-${seasonsQuantity}/ep-${index + 1}.${ep.mimetype.split('/')[1]}`, _fs2.default.readFileSync(ep.path), {
+        const { data, error } = await _connection.connection.storage.from("Semioflix").upload(`/series/${url}/season-${seasonsQuantity}/episodes/ep-${index + 1}.${ep.mimetype.split('/')[1]}`, _fs2.default.readFileSync(ep.path), {
           cacheControl: '3600',
           upsert: false
         });
 
         if (!data || error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload do vídeo!', error });
-        
+
         _fs2.default.unlinkSync(ep.path);
       })
 
@@ -171,7 +179,7 @@ class adminRoutes {
           let ep = new (0, _Episode.Episode)({
             title: req.body["ep-" + (index + 1) + "-title"],
             description: req.body["ep-" + (index + 1) + "-description"],
-            url: process.env.STORAGE + "/Semioflix/series/" + url + "/season-" + seasonsQuantity + "/ep-" + (index + 1) + "." + episodes[index].mimetype.split('/')[1],
+            url: process.env.STORAGE + "/Semioflix/series/" + url + "/season-" + seasonsQuantity + "/episodes/ep-" + (index + 1) + "." + episodes[index].mimetype.split('/')[1],
             visible: req.body["ep-" + (index + 1) + "-visible"],
           })
 

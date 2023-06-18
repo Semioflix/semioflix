@@ -15,6 +15,21 @@ class UploadImage {
   uploadImage = (): void => this.upload.single('cover');
 }
 
+class UploadImages {
+  public upload: any = multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => cb(null, 'public/uploads/'),
+      filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
+    })
+  });
+
+  constructor() {
+    this.uploadImages();
+  }
+
+  uploadImages = (): void => this.upload.fields([ { name: 'cover', maxCount: 1 }, { name: 'background', maxCount: 1 } ]);
+}
+
 class UploadVideo {
   public upload: any = multer({
     storage: multer.diskStorage({
@@ -47,5 +62,6 @@ class UploadVideos {
 
 
 export const uploadImage = new UploadImage().upload;
+export const uploadImages = new UploadImages().upload;
 export const uploadVideo = new UploadVideo().upload;
 export const uploadVideos = new UploadVideos().upload;

@@ -12,7 +12,9 @@
 
 
 
+
 class Episode {
+  
   
   
   
@@ -31,9 +33,10 @@ class Episode {
     likes,
     views,
     visible,
+    thumbnail,
     createdAt,
     updatedAt,
-  }) {;Episode.prototype.__init.call(this);Episode.prototype.__init2.call(this);Episode.prototype.__init3.call(this);Episode.prototype.__init4.call(this);Episode.prototype.__init5.call(this);Episode.prototype.__init6.call(this);Episode.prototype.__init7.call(this);Episode.prototype.__init8.call(this);Episode.prototype.__init9.call(this);Episode.prototype.__init10.call(this);Episode.prototype.__init11.call(this);Episode.prototype.__init12.call(this);Episode.prototype.__init13.call(this);Episode.prototype.__init14.call(this);Episode.prototype.__init15.call(this);Episode.prototype.__init16.call(this);Episode.prototype.__init17.call(this);Episode.prototype.__init18.call(this);
+  }) {;Episode.prototype.__init.call(this);Episode.prototype.__init2.call(this);Episode.prototype.__init3.call(this);Episode.prototype.__init4.call(this);Episode.prototype.__init5.call(this);Episode.prototype.__init6.call(this);Episode.prototype.__init7.call(this);Episode.prototype.__init8.call(this);Episode.prototype.__init9.call(this);Episode.prototype.__init10.call(this);Episode.prototype.__init11.call(this);Episode.prototype.__init12.call(this);Episode.prototype.__init13.call(this);Episode.prototype.__init14.call(this);Episode.prototype.__init15.call(this);Episode.prototype.__init16.call(this);Episode.prototype.__init17.call(this);Episode.prototype.__init18.call(this);Episode.prototype.__init19.call(this);Episode.prototype.__init20.call(this);
     this.id = id || _uuid.v4.call(void 0, );
     this.title = title;
     this.description = description;
@@ -41,6 +44,7 @@ class Episode {
     this.likes = likes || 0;
     this.views = views || 0;
     this.visible = visible || true;
+    this.thumbnail = thumbnail || "/public/images/semioflix-s.png";
     this.createdAt = createdAt || new Date();
     this.updatedAt = updatedAt || new Date();
   }
@@ -83,10 +87,17 @@ class Episode {
     return this.visible;
   }}
 
-   __init16() {this.getCreatedAt = () => this.createdAt}
+   __init16() {this.getThumbnail = () => this.thumbnail || "/public/images/semioflix-s.png"}
+   __init17() {this.setThumbnail = (thumbnail) => {
+    this.thumbnail = thumbnail;
+    this.setUpdatedAt();
+    return this.thumbnail;
+  }}  
 
-   __init17() {this.getUpdatedAt = () => this.updatedAt}
-   __init18() {this.setUpdatedAt = () => this.updatedAt = new Date()}
+   __init18() {this.getCreatedAt = () => this.createdAt}
+
+   __init19() {this.getUpdatedAt = () => this.updatedAt}
+   __init20() {this.setUpdatedAt = () => this.updatedAt = new Date()}
 }
 
 exports.Episode = Episode;

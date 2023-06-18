@@ -15,7 +15,7 @@ class UploadImage {
   __init2() {this.uploadImage = () => this.upload.single('cover')}
 }
 
-class UploadVideo {
+class UploadImages {
    __init3() {this.upload = _multer2.default.call(void 0, {
     storage: _multer2.default.diskStorage({
       destination: (req, file, cb) => cb(null, 'public/uploads/'),
@@ -23,14 +23,14 @@ class UploadVideo {
     })
   })}
 
-  constructor() {;UploadVideo.prototype.__init3.call(this);UploadVideo.prototype.__init4.call(this);
-    this.uploadVideo();
+  constructor() {;UploadImages.prototype.__init3.call(this);UploadImages.prototype.__init4.call(this);
+    this.uploadImages();
   }
 
-  __init4() {this.uploadVideo = () => this.upload.single('video')}
+  __init4() {this.uploadImages = () => this.upload.fields([ { name: 'cover', maxCount: 1 }, { name: 'background', maxCount: 1 } ])}
 }
 
-class UploadVideos {
+class UploadVideo {
    __init5() {this.upload = _multer2.default.call(void 0, {
     storage: _multer2.default.diskStorage({
       destination: (req, file, cb) => cb(null, 'public/uploads/'),
@@ -38,14 +38,30 @@ class UploadVideos {
     })
   })}
 
-  constructor() {;UploadVideos.prototype.__init5.call(this);UploadVideos.prototype.__init6.call(this);
+  constructor() {;UploadVideo.prototype.__init5.call(this);UploadVideo.prototype.__init6.call(this);
+    this.uploadVideo();
+  }
+
+  __init6() {this.uploadVideo = () => this.upload.single('video')}
+}
+
+class UploadVideos {
+   __init7() {this.upload = _multer2.default.call(void 0, {
+    storage: _multer2.default.diskStorage({
+      destination: (req, file, cb) => cb(null, 'public/uploads/'),
+      filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
+    })
+  })}
+
+  constructor() {;UploadVideos.prototype.__init7.call(this);UploadVideos.prototype.__init8.call(this);
     this.uploadVideos();
   }
 
-  __init6() {this.uploadVideos = () => this.upload.array('videos[]')}
+  __init8() {this.uploadVideos = () => this.upload.array('videos[]')}
 }
 
 
  const uploadImage = new UploadImage().upload; exports.uploadImage = uploadImage;
+ const uploadImages = new UploadImages().upload; exports.uploadImages = uploadImages;
  const uploadVideo = new UploadVideo().upload; exports.uploadVideo = uploadVideo;
  const uploadVideos = new UploadVideos().upload; exports.uploadVideos = uploadVideos;

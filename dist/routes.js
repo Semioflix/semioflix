@@ -53,7 +53,7 @@ class generalRoutes {
       if (serieError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao atualizar a série!', error });
 
       return res.render("pages/serie", {
-        title: "Serie",
+        title: object.getTitle(),
         imports: "serie",
         serie
       });

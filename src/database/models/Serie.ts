@@ -6,6 +6,7 @@ interface ISerie {
   description: string;
   cast?: string;
   cover: string;
+  background?: string;
   visible?: boolean;
   likes?: number;
   views?: number;
@@ -19,6 +20,7 @@ class Serie implements ISerie {
   description: string;
   cast?: string;
   cover: string;
+  background?: string;
   visible?: boolean;
   likes?: number;
   views?: number;
@@ -31,6 +33,7 @@ class Serie implements ISerie {
     description,
     cast,
     cover,
+    background,
     visible,
     likes,
     views,
@@ -42,6 +45,7 @@ class Serie implements ISerie {
     this.description = description;
     this.cast = cast;
     this.cover = cover;
+    this.background = background || "/public/images/semioflix-transparent.png";
     this.visible = visible || true;
     this.likes = likes || 0;
     this.views = views || 0;
@@ -72,6 +76,12 @@ class Serie implements ISerie {
   public getCover = (): string => this.cover;
   public setCover = (cover: string): void => {
     this.cover = cover;
+    this.setUpdatedAt();
+  };
+
+  public getBackground = (): string => this.background || "/public/images/semioflix-transparent.png";
+  public setBackground = (background: string): void => {
+    this.background = background;
     this.setUpdatedAt();
   };
 

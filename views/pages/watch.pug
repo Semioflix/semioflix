@@ -35,13 +35,16 @@ block content
           button#nextEpAlertClose.btn.btn-red
             i.fas.fa-times
 
+    h2 Próximos espisódios 
+
     .catalog-session
       each episode in season.episodes
-        .catalog-item(class=`${episode.id == ep.id ? 'current' : ''}`)
-          a.catalog-item(href=`/watch/${season.id}/${episode.id}`)
-            img.catalog-img(src="/public/images/semioflix-s.png")
+        .catalog-item
+          a.catalog-link(href=`/watch/${season.id}/${episode.id}`, class=`${episode.id == ep.id ? 'current' : ''}`)
+            img.catalog-img(src=episode.thumbnail)
             .catalog-info
               h3.catalog-title #{episode.title}
+              h4.catalog-description #{episode.description}
               .catalog-metrics
                 .catalog-metric
                   i.fas.fa-thumbs-up
