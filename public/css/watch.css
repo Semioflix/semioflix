@@ -15,7 +15,7 @@
 .content h4,
 .content h2 {
   font-weight: 700;
-  padding: 20px 0 0 0;
+  padding: 10px 0 0 0;
 }
 
 .content p {
@@ -56,12 +56,21 @@
 #next-ep-alert .next-ep-alert-title {
   font-size: 20px;
   font-weight: 700;
-  padding: 20px 0 0 0;
+  padding: 10px 0 0 0;
 }
 
 #next-ep-alert .next-ep-alert-description {
   color: #999;
   padding-bottom: 20px;
+  text-align: justify;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 16px;
+  max-height: 64px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-top: 10px;
 }
 
 #next-ep-alert .next-ep-alert-button a {
@@ -135,6 +144,13 @@
 .catalog-description {
   color: #999;
   text-align: justify;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 16px;
+  max-height: 64px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .catalog-metrics {
@@ -150,4 +166,26 @@
 
 .catalog-metric i {
   margin-right: 5px;
+}
+
+.episode-createdBy {
+  margin: 8px 0;
+}
+
+@media screen and (min-width: 320px) {
+  .catalog-link {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .catalog-link {
+    width: 80%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .catalog-link {
+    width: 60%;
+  }
 }

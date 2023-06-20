@@ -8,7 +8,7 @@ block content
         embed(src=ep.url, width="320", height="240")
 
     h2.title #{ep.title}
-    p.episode-createdBy #{new Date(ep.createdAt).getFullYear()}
+    p.episode-createdBy Publicado em #{new Date(ep.createdAt).toLocaleDateString("pt-BR", { day: 'numeric', month: 'long', year: 'numeric' })}
     p.paragraph #{ep.description}
     .serie-metrics
       .serie-metric
@@ -27,7 +27,7 @@ block content
       #next-ep-alert
         h2 Assista ao próximo episódio
         .next-ep-alert-title
-          h4 #{nextEp.title}
+          h4 Episódio: #{nextEp.title}
         .next-ep-alert-description
           p #{nextEp.description}
         .next-ep-alert-button

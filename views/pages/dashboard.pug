@@ -2,27 +2,27 @@ extends ../layout
 block content
   include ../bar.pug
   .content
-      each a in [0, 1, 2, 3, 4]
-        .catalog-session
-          .catalog-title 
-            h1 # Exames físicos
-          .catalog-buttons
-            button.catalog-button(data-direction="left")
-              i.fas.fa-chevron-left
-            button.catalog-button(data-direction="right")
-              i.fas.fa-chevron-right
-          .catalog-movies
-            each serie in series
-              .movie
-                a(href="/serie/" + serie.id , title=serie.title)
-                  .alert-new-espisode <i class="fab fa-medapps"></i> Novos episódios
-                  img(src=serie.cover, alt="Movie")
+    //each a in [0, 1, 2, 3, 4]
+    .catalog-session
+      .catalog-title 
+        //h1 # Exames físicos
+      .catalog-buttons
+        button.catalog-button(data-direction="left")
+          i.fas.fa-chevron-left
+        button.catalog-button(data-direction="right")
+          i.fas.fa-chevron-right
+      .catalog-movies
+        each serie in series
+          .movie
+            a(href="/serie/" + serie.id , title=serie.title)
+              .alert-new-espisode <i class="fab fa-medapps"></i> Novos episódios
+              img(src=serie.cover, alt=serie.title)
 
-            each p in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-              .movie
-                a(href="/serie/" + a, title="Movie " + p)
-                  .alert-new-espisode <i class="fab fa-medapps"></i>  episódios
-                  img(src="/public/images/semioflix-s.png", alt="Movie")
+        //each p in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+          .movie
+            a(href="/serie/" + a, title="Movie " + p)
+              .alert-new-espisode <i class="fab fa-medapps"></i>  episódios
+              img(src="/public/images/semioflix-s.png", alt="Movie")
 
 
   script. 
