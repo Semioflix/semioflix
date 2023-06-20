@@ -18,11 +18,27 @@ block content
       margin-bottom: 1rem;
     }
 
+    .photos {
+      display: flex;
+      white-space: nowrap;
+      overflow-x: scroll;
+    }
+
+    .photo {
+      width: 520px;
+    }
+
   include ../bar.pug
   
   .content 
     h2.title Sobre o Semioflix
     p.paragraph
       |   O semioflix é uma aplicação voltada à produção do conhecimento científico na área de semiótica em enfermagem.
-      | A aplicação foi desenvolvida por alunos do curso de bacharel em enfermagem, turma 2021.2 da Universidade Federal de Campina Grande - UFCG, pelo Centro de Educação e Saúde - CES, da cidade de Cuité - PB.
+      | A aplicação foi desenvolvida por alunos do curso de enfermagem, turma 2021.2 da Universidade Federal de Campina Grande - UFCG, pelo Centro de Educação e Saúde - CES, da cidade de Cuité - PB.
       | Na disciplina de Bases Teoricas e Práticas de Enfermagem em Semiologia e Semiotécnica I, sob orientação das professoras Lidiane Lima de Andrade (<a href="https://instagram.com/lidilandrade" target="__blank"> @lidilandrade </a>) e Edlene Regis Silva (<a href="https://instagram.com/edlene_regis" target="__blank"> @edlene_regis </a>)
+
+    .photos
+      img.photo(src="/public/images/student/photo-1.jpg" alt="Alunos")
+      img.photo(src="/public/images/student/photo-2.jpg" alt="Alunos")
+      img.photo(src="/public/images/student/photo-3.jpg" alt="Alunos")
+      img.photo(src="/public/images/student/photo-4.jpg" alt="Alunos")
