@@ -3,7 +3,7 @@ block content
   include ../bar-admin.pug
 
   .content 
-    img(class="serie-cover", src="/public/images/semioflix.png", alt=title)
+    img(class="serie-cover", src=serie.background, alt=title)
 
     button.btn.btn-green(data-modal-controller="modal-create-season") <i class="fas fa-folder-plus"></i> Criar nova temporada
     .modal.modal-xxl(data-modal="modal-create-season")
@@ -21,7 +21,7 @@ block content
                 .episode(data-ep="ep-" + index)  
                   .updated
                     label.video-preview#episode-1-preview(for="episode-1") <i class="fas fa-video"></i> Selecione um vídeo
-                    input(type="file", name="videos[]" , id="episode-1", required, accept="video/mp4,video/x-m4v,video/*")
+                    input.hidden(type="file", name="videos[]" , id="episode-1", required, accept="video/mp4,video/x-m4v,video/*")
                   .updated-infos 
                     .form-group 
                       label(for="episode-1-title") <i class="fas fa-hashtag"></i> Título do episódio
@@ -34,6 +34,9 @@ block content
                       select#episode-1-visible.form-control(name="ep-" + index + "-visible")
                         option(value="true") Sim
                         option(value="false") Não
+                    .form-group
+                      label(for="episode-1-thumbnail") <i class="fas fa-clock"></i> Thumbnail
+                      input#episode-1-thumbnail.form-control(type="file", placeholder="Duração do episódio", accept="image/*", required, name="thumbs[]")
                     .form-group
                       button.btn-remove-episode(type="button", data-remove-ep="ep-" + index) <i class="fas fa-trash"></i> Remover episódio
                       button.btn-move-up-episode(type="button", data-move-up-ep="ep-" + index) <i class="fas fa-arrow-up"></i> Mover para cima
@@ -87,7 +90,7 @@ block content
               //- .form-group#image-group
               //-   label.text-file-preview(for="image") <i class="fas fa-images"></i> Clique para selecionar uma imagem
               //-   input#image.form-control(type="file", accept="image/*", name="cover", required)                          
-
+        .modal-footer
           button.btn.btn-red(type="button", data-modal-cancel="modal-edit-serie") <i class="fas fa-times-circle"></i> Cancelar
           button.btn.btn-green(type="submit") <i class="fas fa-check-circle"></i> Finalizar
 
@@ -114,12 +117,11 @@ block content
           each episode, index2 in season.episodes
             div.serie-episode
               a(href="/watch/" + season.id + "/" + episode.id)
-                img(class="serie-episode-cover", src="/public/images/semioflix.png", alt=episode.title)
+                img(class="serie-episode-cover", src=episode.thumbnail, alt=episode.title)
               div.serie-episode-infos
                 h3.serie-episode-title Episódio #{index2 + 1}: #{episode.title} 
                 p.serie-episode-description #{episode.description}
                 a.serie-btn-play(href="/watch/" + season.id + "/" + episode.id) <i class="fas fa-play"></i> Assistir 
-
 
   script. 
     const btnSeasons = document.querySelectorAll("[data-btn-season]");
@@ -176,7 +178,7 @@ block content
       episode.innerHTML = `
         <div class="updated">
           <label class="video-preview" for="episode-${qtd}"><i class="fas fa-video"></i> Selecione um vídeo</label>
-          <input type="file" name="videos[]" id="episode-${qtd}" class="form-control" required accept="video/mp4,video/x-m4v,video/*">
+          <input type="file" name="videos[]" id="episode-${qtd}" class="form-control hidden" required accept="video/mp4,video/x-m4v,video/*">
         </div>
         <div class="updated-infos">
           <div class="form-group">
@@ -193,6 +195,10 @@ block content
               <option value="true">Sim</option>
               <option value="false">Não</option>
             </select>
+          </div>
+          <div class="form-group">
+            <label for="episode-${qtd}-thumbnail"><i class="fas fa-clock"></i> Thumbnail do episódio</label>
+            <input id="episode-${qtd}-thumbnail" class="form-control" type="file" placeholder="Duração do episódio" accept="image/*" required name="thumbs[]">
           </div>
           <div class="form-group">
             <button class="btn-remove-episode" type="button" data-remove-ep="ep-${qtd}"><i class="fas fa-trash"></i> Remover episódio</button>

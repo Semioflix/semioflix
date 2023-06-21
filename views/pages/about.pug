@@ -21,7 +21,7 @@ block content
     .photos {
       display: flex;
       white-space: nowrap;
-      overflow-x: scroll;
+      overflow-x: hidden;
     }
 
     .photo {
@@ -35,10 +35,37 @@ block content
     p.paragraph
       |   O semioflix é uma aplicação voltada à produção do conhecimento científico na área de semiótica em enfermagem.
       | A aplicação foi desenvolvida por alunos do curso de enfermagem, turma 2021.2 da Universidade Federal de Campina Grande - UFCG, pelo Centro de Educação e Saúde - CES, da cidade de Cuité - PB.
-      | Na disciplina de Bases Teoricas e Práticas de Enfermagem em Semiologia e Semiotécnica I, sob orientação das professoras Lidiane Lima de Andrade (<a href="https://instagram.com/lidilandrade" target="__blank"> @lidilandrade </a>) e Edlene Regis Silva (<a href="https://instagram.com/edlene_regis" target="__blank"> @edlene_regis </a>)
+      | Na disciplina de Bases Teoricas e Práticas de Enfermagem em Semiologia e Semiotécnica I, sob orientação das professoras Lidiane Lima de Andrade (<a href="https://instagram.com/lidilandrade" target="__blank"> @lidilandrade </a>) e Edlene Regis Silva (<a href="https://instagram.com/edlene_regis" target="__blank"> @edlene_regis</a>).
 
     .photos
-      img.photo(src="/public/images/student/photo-1.jpg" alt="Alunos")
-      img.photo(src="/public/images/student/photo-2.jpg" alt="Alunos")
-      img.photo(src="/public/images/student/photo-3.jpg" alt="Alunos")
-      img.photo(src="/public/images/student/photo-4.jpg" alt="Alunos")
+      img.photo(src="/public/images/students/photo-1.jpg" alt="Alunos")
+      img.photo(src="/public/images/students/photo-2.jpg" alt="Alunos")
+      img.photo(src="/public/images/students/photo-3.jpg" alt="Alunos")
+      img.photo(src="/public/images/students/photo-4.jpg" alt="Alunos")
+      img.photo(src="/public/images/students/photo-5.jpg" alt="Alunos")
+      img.photo(src="/public/images/students/photo-7.jpg" alt="Alunos")
+      img.photo(src="/public/images/students/photo-9.jpg" alt="Alunos")
+  
+  script. 
+
+    const photos = document.querySelector(".photos");
+    const photo = document.querySelectorAll(".photo");
+
+    let scroll = 0;
+    let direction = 1;
+
+    setInterval(() => {
+      scroll += direction;
+
+      if (scroll === photo.length - 3)  direction = -1;
+      else if (scroll === 0) direction = 1;
+    
+      photos.scroll({
+        left: scroll * 520,
+        behavior: "smooth",
+      });
+    }, 4000);
+
+
+    
+    

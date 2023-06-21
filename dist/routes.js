@@ -21,6 +21,18 @@ class generalRoutes {
   }
 
   config() {
+
+    this.routes.get("/view", async (req, res) => {
+
+      const { data: series, error } = await _connection.connection.from("Series").select("*, Seasons(*)");
+
+      return res.render("pages/view", {
+        title: "View",
+        imports: "view",
+        series
+      });
+    });
+
     this.routes.get("/", async (req, res) => {
 
       const { data: series, error } = await _connection.connection.from("Series").select("*").eq("visible", true);

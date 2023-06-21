@@ -60,8 +60,23 @@ class UploadVideos {
   __init8() {this.uploadVideos = () => this.upload.array('videos[]')}
 }
 
+class UploadSeason {
+   __init9() {this.upload = _multer2.default.call(void 0, {
+    storage: _multer2.default.diskStorage({
+      destination: (req, file, cb) => cb(null, 'public/uploads/'),
+      filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
+    })
+  })}
+
+  constructor() {;UploadSeason.prototype.__init9.call(this);UploadSeason.prototype.__init10.call(this);
+    this.uploadVideos();
+  }
+
+  __init10() {this.uploadVideos = () => this.upload.fields([ { name: 'videos[]' }, { name: 'thumbs[]' } ])}
+}
 
  const uploadImage = new UploadImage().upload; exports.uploadImage = uploadImage;
  const uploadImages = new UploadImages().upload; exports.uploadImages = uploadImages;
  const uploadVideo = new UploadVideo().upload; exports.uploadVideo = uploadVideo;
  const uploadVideos = new UploadVideos().upload; exports.uploadVideos = uploadVideos;
+ const uploadSeason = new UploadSeason().upload; exports.uploadSeason = uploadSeason;

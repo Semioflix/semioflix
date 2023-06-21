@@ -3,8 +3,37 @@ block content
   include ../bar-admin.pug
   .content
 
-    button#add-movie-button <i class="fas fa-folder-plus"></i> Crie uma nova série
+    //button(type="button", class="btn btn-blue", data-modal-controller="modal-create-serie") <i class="fas fa-plus-circle"></i> Criar uma nova série
+    //.modal.modal-xxl(data-modal="modal-create-serie")
+      form.modal-content(action="/admin/serie/update", method="POST", enctype="multipart/form-data")
+        .modal-header
+          h2 <i class="fas fa-plus-circle"></i> Criar uma nova série
+          button.modal-close(type="button") <i class="fas fa-times-circle"></i>
 
+        .modal-body
+          .row 
+            .col 
+
+            .col
+              .form-group
+                label(for="name") <i class="fas fa-file-signature"></i> Nome da série
+                input.form-control(type="text", name="name", id="name", placeholder="Nome da série", required)
+              .from-group
+                label(for="description") <i class="fas fa-file-alt"></i> Descrição da série
+                textarea.form-control(placeholder="Descrição da série", required, name="description")
+              .form-group
+                label(for="cast") <i class="fas fa-users-rectangle"></i> Elenco da série
+                input.form-control(type="text", name="cast", id="cast", placeholder="Elenco da série", required)
+
+
+
+        .modal-footer
+          button.btn.btn-red(type="button", data-modal-cancel="modal-create-serie") <i class="fas fa-times-circle"></i> Cancelar
+          button.btn.btn-green(type="submit") <i class="fas fa-check-circle"></i> Finalizar
+
+
+
+    button#add-movie-button <i class="fas fa-folder-plus"></i> Crie uma nova série
     .modal-new-movie
       form(method="post", action="/admin/serie/create", enctype="multipart/form-data")
         .modal-content

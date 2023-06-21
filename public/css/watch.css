@@ -6,12 +6,6 @@
   flex-direction: column;
 }
 
-.content video {
-  margin-top: 20px;
-  width: 1280px;
-  height: 720px;
-}
-
 .content h4,
 .content h2 {
   font-weight: 700;
@@ -21,6 +15,7 @@
 .content p {
   color: #999;
   padding-bottom: 20px;
+  text-align: justify;
 }
 
 .content .serie-metrics {
@@ -97,7 +92,6 @@
 
 .catalog-item {
   width: 100%;
-  height: 250px;
   margin: 0 8px;
   text-decoration: none;
   color: #fff;
@@ -117,7 +111,7 @@
 .catalog-link {
   width: 60%;
   height: 100%;
-  display: flex; 
+  display: flex;
   border: 4px solid #ccc;
   border-radius: 6px;
 }
@@ -186,6 +180,124 @@
 
 @media screen and (min-width: 1024px) {
   .catalog-link {
-    width: 60%;
+    width: 80%;
   }
 }
+
+
+@media screen and (min-width: 320px) {
+  .content {
+    padding: 80px 0 0 0;
+  }
+
+  #videoPlayer {
+    width: 100%;
+  }
+
+  .serie-cover {
+    width: 100%;
+    object-fit: contain;
+    background-color: white;
+  }
+
+  .catalog-link {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .catalog-img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .catalog-link {
+    margin-top: 20px;
+  }
+
+  .catalog-link-infos {
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  .serie-btn-play {
+    display: flex;
+    width: 100%;
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .serie-btn-play i {
+    margin-right: 10px;
+  }
+
+}
+
+@media screen and (min-width: 768px) {
+  .content {
+    padding: 80px 0 0 0;
+  }
+
+  #videoPlayer {
+    width: 100%;
+  }
+
+  .catalog-link {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .catalog-img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .catalog-link-infos {
+    width: 100%;
+    padding: 10px 0;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .content {
+    padding: 80px;
+  }
+
+  .serie-cover {
+    width: 100%;
+    height: 600px;
+    object-fit: contain;
+    background-color: white;
+  }
+
+  .catalog-link {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    height: 250px;
+  }
+
+  .catalog-img {
+    width: 400px;
+    height: 250px;
+    background-position: center;
+  }
+
+  .catalog-link {
+    margin-top: 10px;
+  }
+
+  .catalog-link-infos {
+    width: 100%;
+    padding: 10px 20px;
+  }
+}
+
+@media screen and (min-width: 1140px) {
+  .content {
+    padding: 100px;
+  }
+}
+

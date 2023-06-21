@@ -1,5 +1,16 @@
 extends ../layout
 block content
+
+  style. 
+    /* DEIXAR REPRODUTOR DE VÍDEO STILO NETFLIX */
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background-color: black;
+    } 
+
   include ../bar.pug
   .content
     video#videoPlayer(src=ep.url, controls, autoplay)
@@ -92,5 +103,60 @@ block content
           .then((data) => {
             console.log(data);
           });
+      }
+    });
+
+
+    // pausar com tecla espaço
+    // adiantar com seta direita + 5s
+    // retroceder com seta esquerda - 5s
+    // proximo episodio com shift + seta direita
+    // episodio anterior com shift + seta esquerda
+
+    // f = fullscreen
+    // m = mute
+
+
+    document.addEventListener('keydown', (e) => {
+      
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (videoPlayer.paused) videoPlayer.play();
+        else videoPlayer.pause();
+      }
+
+      if (e.code === 'KeyF') {
+        e.preventDefault();
+        if (videoPlayer.requestFullscreen) videoPlayer.requestFullscreen();
+        else if (videoPlayer.webkitRequestFullscreen) videoPlayer.webkitRequestFullscreen();
+        else if (videoPlayer.msRequestFullscreen) videoPlayer.msRequestFullscreen();
+      }
+
+      if (e.code === 'KeyM') {
+        e.preventDefault();
+        if (videoPlayer.muted) videoPlayer.muted = false;
+        else videoPlayer.muted = true;
+      }
+
+      if (e.code === 'ArrowRight'){
+        e.preventDefault();
+        videoPlayer.currentTime += 5;
+      } 
+  
+      if (e.code === 'ArrowLeft'){
+        e.preventDefault();
+        videoPlayer.currentTime -= 5;
+      } 
+
+      if (e.code === 'ShiftLeft' && e.code === 'ArrowUp') {
+        e.preventDefault();
+        const nextEp = document.querySelector('#next-ep-alert a');
+        if (nextEp) nextEp.click();
+      }
+
+      if (e.code === 'ShiftLeft' && e.code === 'ArrowDown') {
+        e.preventDefault();
+        const prevEp = document.querySelector('#prev-ep-alert a');
+        if (prevEp) prevEp.click();
       }
     });

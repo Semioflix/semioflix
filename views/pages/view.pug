@@ -1,0 +1,139 @@
+extends ../layout
+block content
+
+  style. 
+    input, textarea {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .serie {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+  include ../bar.pug
+
+  textarea(name="", cols="30", rows="10", style="width: 100%; height: 500px; padding: 10px; color: black;") #{JSON.stringify(series, null, 2)}
+
+  each serie in series  
+    .serie
+      div   
+        label(for="serie-" + serie.id) Título da série
+        br 
+        input(type="text", name="serie-" + serie.id, id="serie-" + serie.id, value=serie.title, required)
+      div 
+        label(for="serie-" + serie.id) Descrição da série
+        br 
+        textarea(type="text", name="serie-" + serie.id, id="serie-" + serie.id, required) #{serie.description}
+      div
+        label(for="serie-" + serie.id) Elenco da série
+        br 
+        input(type="text", name="serie-" + serie.id, id="serie-" + serie.id, value=serie.cast, required)
+      div
+        label(for="serie-" + serie.id) Disponível para visualização
+        br 
+        input(type="text", name="serie-" + serie.id, id="serie-" + serie.id, value=serie.disponible, required)
+        
+
+  //h1 Upload de arquivos
+  //.content
+
+    button(type="button", class="btn btn-blue", data-modal-controller="modal-create-serie") <i class="fas fa-plus-circle"></i> Criar uma nova série
+    .modal.modal-xxl(data-modal="modal-create-serie")
+      form.modal-content(action="/admin/serie/update", method="POST", enctype="multipart/form-data")
+        .modal-header
+          h2 <i class="fas fa-plus-circle"></i> Criar uma nova série
+          button.modal-close(type="button") <i class="fas fa-times-circle"></i>
+
+        .modal-body
+          .row 
+            .col 
+
+            .col
+              .form-group
+                label(for="name") <i class="fas fa-file-signature"></i> Nome da série
+                input.form-control(type="text", name="name", id="name", placeholder="Nome da série", required)
+              .from-group
+                label(for="description") <i class="fas fa-file-alt"></i> Descrição da série
+                textarea.form-control(placeholder="Descrição da série", required, name="description")
+              .form-group
+                label(for="cast") <i class="fas fa-users-rectangle"></i> Elenco da série
+                input.form-control(type="text", name="cast", id="cast", placeholder="Elenco da série", required)
+
+
+
+        .modal-footer
+          button.btn.btn-red(type="button", data-modal-cancel="modal-create-serie") <i class="fas fa-times-circle"></i> Cancelar
+          button.btn.btn-green(type="submit") <i class="fas fa-check-circle"></i> Finalizar
+
+    .list-uploads
+      each number, index in [0, 1, 2, 3]
+        .upload(data-drop="upload")
+          label.upload-group(for="upload-" + index)
+            p.upload-title <i class="fas fa-file"> </i> Clique ou solte um arquivo aqui para fazer o upload
+            input.upload-input(type="file", name="file", id="upload-" + index, accept="image/*, video/*", data-upload="upload")
+          .upload-preview
+            img.upload-preview-image(src="https://via.placeholder.com/150")
+  
+  script. 
+
+    const drop = document.querySelectorAll('[data-drop="upload"]');
+
+    drop.forEach(element => {
+
+      element.addEventListener('dragenter', (event) => {
+        event.preventDefault();
+        element.classList.add('dragover');
+      });
+
+      element.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        element.classList.add('dragover');
+      });
+
+      element.addEventListener('dragleave', (event) => {
+        event.preventDefault();
+        element.classList.remove('dragover');
+      });
+
+      element.addEventListener('drop', (event) => {
+        event.preventDefault();
+        element.classList.remove('dragover');
+
+        const file = event.dataTransfer.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+          const preview = element.nextElementSibling;
+          const image = preview.querySelector('img');
+
+          image.src = event.target.result;
+        }
+
+        reader.readAsDataURL(file);
+      });
+    });
+
+    const upload = document.querySelectorAll('[data-upload="upload"]');
+
+    upload.forEach(input => {
+      input.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+          const preview = input.parentElement.nextElementSibling;
+          const image = preview.querySelector('img');
+
+          image.src = event.target.result;
+        }
+
+        reader.readAsDataURL(file);
+      });
+    });

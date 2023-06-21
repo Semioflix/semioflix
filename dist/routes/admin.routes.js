@@ -51,8 +51,11 @@ class adminRoutes {
 
     this.routes.post("/serie/create", _uploads.uploadImages.fields([{ name: 'cover', maxCount: 1 }, { name: 'background', maxCount: 1 }]), async (req, res) => {
       const { title, description, cast, visible } = req.body;
-      const cover = _optionalChain([req, 'access', _2 => _2.files, 'optionalAccess', _3 => _3.cover, 'access', _4 => _4[0]]);
-      const background = _optionalChain([req, 'access', _5 => _5.files, 'optionalAccess', _6 => _6.background, 'access', _7 => _7[0]]);
+
+      if (!req.files) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
+
+      const cover = req.files['cover'][0];
+      const background = req.files['background'][0];
 
       if (!title || !description || !cast || !visible) return res.status(400).json({ message: 'Ops! Você deve preencher todos os campos para continuar!' });
       if (!cover) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
@@ -81,8 +84,8 @@ class adminRoutes {
         description,
         cast,
         visible,
-        cover: `${process.env.STORAGE}/${_optionalChain([dataCover, 'optionalAccess', _8 => _8.Key])}`,
-        background: `${process.env.STORAGE}/${_optionalChain([dataBackground, 'optionalAccess', _9 => _9.Key])}`
+        cover: `${process.env.STORAGE}/${_optionalChain([dataCover, 'optionalAccess', _2 => _2.Key])}`,
+        background: `${process.env.STORAGE}/${_optionalChain([dataBackground, 'optionalAccess', _3 => _3.Key])}`
       })
 
       const { data: serieData, error: serieError } = await _connection.connection.from("Series").insert(serie);
@@ -99,11 +102,13 @@ class adminRoutes {
       const cover = req.file;
 
       if (!id || !title || !description || !cast || !visible) return res.status(400).json({ message: 'Ops! Você deve preencher todos os campos para continuar!' });
-      if (!cover) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
+      if (cover) {
+        // return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
 
-      const dist = title.split(' ').map((word) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const dist = title.split(' ').map((word) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      _fs2.default.unlinkSync(cover.path);
+        _fs2.default.unlinkSync(cover.path);
+      }
 
       const { data: serieFinded } = await _connection.connection.from("Series").select("*").eq("id", id).single();
 
@@ -118,7 +123,6 @@ class adminRoutes {
       const { data: serieData, error: serieError } = await _connection.connection.from("Series").update(serie).match({ id });
 
       if (serieError) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao criar a série!', serieError });
-
 
       return res.status(200).redirect("/admin/serie/" + serie.getId());
     });
@@ -143,12 +147,15 @@ class adminRoutes {
       return res.status(200).redirect("/admin");
     });
 
-    this.routes.post("/season/create", _uploads.uploadVideos.array('videos[]'), async (req, res) => {
-      const episodes = req.files;
-
+    this.routes.post("/season/create", _uploads.uploadVideos.fields([{ name: 'videos[]' }, { name: 'thumbs[]' }]), async (req, res) => {
       const id = req.body.serieId;
       const title = req.body['season-title'];
 
+      if (!req.files) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
+      
+      const thumbs = req.files['thumbs[]'];
+      const videos = req.files['videos[]'];
+      
       delete req.body.serieId;
       delete req.body['season-title'];
 
@@ -159,9 +166,7 @@ class adminRoutes {
       const seasonsQuantity = serie.Seasons.length + 1;
       const url = serie.title.split(' ').map((word) => word[0].toUpperCase() + word.slice(1)).join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      if (!episodes) return res.status(400).json({ message: 'Ops! Você deve selecionar um arquivo para continuar!' });
-
-      episodes.forEach(async (ep, index) => {
+      videos.forEach(async (ep, index) => {
         const { data, error } = await _connection.connection.storage.from("Semioflix").upload(`/series/${url}/season-${seasonsQuantity}/episodes/ep-${index + 1}.${ep.mimetype.split('/')[1]}`, _fs2.default.readFileSync(ep.path), {
           cacheControl: '3600',
           upsert: false
@@ -172,6 +177,17 @@ class adminRoutes {
         _fs2.default.unlinkSync(ep.path);
       })
 
+      thumbs.forEach(async (thumb, index) => {
+        const { data, error } = await _connection.connection.storage.from("Semioflix").upload(`/series/${url}/season-${seasonsQuantity}/thumbs/ep-${index + 1}.${thumb.mimetype.split('/')[1]}`, _fs2.default.readFileSync(thumb.path), {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+        if (!data || error) return res.status(400).json({ message: 'Ops! Ocorreu um erro ao fazer o upload do vídeo!', error });
+
+        _fs2.default.unlinkSync(thumb.path);
+      })
+
       let season = new (0, _Season.Season)({
         serieId: id,
         title,
@@ -179,8 +195,9 @@ class adminRoutes {
           let ep = new (0, _Episode.Episode)({
             title: req.body["ep-" + (index + 1) + "-title"],
             description: req.body["ep-" + (index + 1) + "-description"],
-            url: process.env.STORAGE + "/Semioflix/series/" + url + "/season-" + seasonsQuantity + "/episodes/ep-" + (index + 1) + "." + episodes[index].mimetype.split('/')[1],
+            url: process.env.STORAGE + "/Semioflix/series/" + url + "/season-" + seasonsQuantity + "/episodes/ep-" + (index + 1) + "." + videos[index].mimetype.split('/')[1],
             visible: req.body["ep-" + (index + 1) + "-visible"],
+            thumbnail: process.env.STORAGE + "/Semioflix/series/" + url + "/season-" + seasonsQuantity + "/thumbs/ep-" + (index + 1) + "." + thumbs[index].mimetype.split('/')[1]
           })
 
           return ep;
