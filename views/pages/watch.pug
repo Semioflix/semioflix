@@ -77,12 +77,14 @@ block content
     });
     
     // quando o usuário assistir 80% do episódio, exibir o alerta
-
+    let alertView = false;
+   
     videoPlayer.addEventListener('timeupdate', () => {
       if (!nextEpAlert) return;
       
-      if (videoPlayer.currentTime >= videoPlayer.duration * 0.9) {
+      if (videoPlayer.currentTime >= videoPlayer.duration * 0.9 && !alertView) {
         nextEpAlert.style.display = 'flex';
+        alertView = true;
       }
     });
 
