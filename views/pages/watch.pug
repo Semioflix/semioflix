@@ -72,6 +72,10 @@ block content
     const nextEpAlertClose = document.querySelector('#nextEpAlertClose');
     const videoPlayer = document.querySelector('#videoPlayer');
 
+    nextEpAlertClose.addEventListner('click', (e) => {
+      document.querySelector("#next-ep-alert").style.display = 'none';
+    });
+    
     // quando o usuário assistir 80% do episódio, exibir o alerta
 
     videoPlayer.addEventListener('timeupdate', () => {
@@ -160,3 +164,4 @@ block content
         if (prevEp) prevEp.click();
       }
     });
+  
