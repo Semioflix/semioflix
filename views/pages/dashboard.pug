@@ -18,6 +18,12 @@ block content
               .alert-new-espisode <i class="fab fa-medapps"></i> Novos episódios
               img(src=serie.cover, alt=serie.title)
 
+        each serie in seriesNo
+          .movie
+            a(title=serie.title)
+              .alert-future-espisode <i class="fas fa-clock"></i> Em breve
+              img(src=serie.cover, alt=serie.title)
+
         //each p in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
           .movie
             a(href="/serie/" + a, title="Movie " + p)

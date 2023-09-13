@@ -165,6 +165,18 @@
   z-index: 100;
 }
 
+.alert-future-espisode {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: green;
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 0 0 5px 0;
+  z-index: 100;
+}
 
 
 

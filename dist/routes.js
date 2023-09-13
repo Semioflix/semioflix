@@ -36,11 +36,13 @@ class generalRoutes {
     this.routes.get("/", async (req, res) => {
 
       const { data: series, error } = await _connection.connection.from("Series").select("*").eq("visible", true);
+      const { data: seriesNo, error: errorNo } = await _connection.connection.from("Series").select("*").eq("visible", false);
 
       return res.render("pages/dashboard", {
         title: "Dashboard",
         imports: "dashboard",
-        series
+        series,
+        seriesNo
       });
     });
 
